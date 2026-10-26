@@ -1,0 +1,47 @@
+Table usuario {
+  id int [pk, increment]
+  nome varchar(100) [not null]
+  email varchar(150) [not null, unique]
+  senha_hash varchar(255) [not null]
+  tipo varchar(20) [not null] // Admin e N1
+  ativo boolean [not null, default: true]
+  created_at datetime [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at datetime [not null, default: `CURRENT_TIMESTAMP`]
+}
+
+Table chamado {
+  id int [pk, increment]
+  id_local int [ref: > local.id]
+  id_equipamento int [ref: > equipamento.id]
+  id_tecnico_resolucao int [ref: > usuario.id]
+  ra_solicitante char(13) [not null]
+  titulo varchar(150) [not null]
+  descricao text [not null]
+  tipo varchar(20) [not null]
+  status varchar(20) [not null, default: 'Aberto']
+  prioridade varchar(20) [not null]
+  nivel_atendimento varchar(10) [not null, default: 'N1']
+  data_abertura datetime [not null, default: `CURRENT_TIMESTAMP`]
+  data_fechamento datetime
+  created_at datetime [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at datetime [not null, default: `CURRENT_TIMESTAMP`]
+}
+
+Table local {
+  id int [pk, increment]
+  nome varchar(100) [not null, unique]
+  descricao varchar(255)
+  ativo boolean [not null, default: true]
+  created_at datetime [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at datetime [not null, default: `CURRENT_TIMESTAMP`]
+}
+
+Table equipamento {
+  id int [pk, increment]
+  id_local int [not null, ref: > local.id]
+  nome varchar(100) [not null, unique]
+  descricao varchar(255)
+  ativo boolean [not null, default: true]
+  created_at datetime [not null, default: `CURRENT_TIMESTAMP`]
+  updated_at datetime [not null, default: `CURRENT_TIMESTAMP`]
+}
