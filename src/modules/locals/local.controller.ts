@@ -11,6 +11,15 @@ class LocalController {
     res.status(201).json(local);
   }
 
+  // Excluir local por ID
+  async destroy(req: Request, res: Response): Promise<void> {
+    const id = parseId(req.params.id);
+
+    await localService.destroy(id);
+
+    res.status(204).send();
+  }
+
   // Buscar local por ID
   async show(req: Request, res: Response): Promise<void> {
     const id = parseId(req.params.id);

@@ -7,6 +7,62 @@ import { createLocalSchema } from "./dto/create-local.dto";
 
 const localRoutes = Router();
 
+// #region GET /locals/:id
+/**
+ * @openapi
+ * /locals/{id}:
+ *   get:
+ *     tags:
+ *       - Locals
+ *     summary: Buscar local por ID
+ *     description: Retorna os dados de um local específico.
+ *     operationId: getLocalById
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: Identificador único do local.
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *         example: 1
+ *     responses:
+ *       '200':
+ *         description: Local encontrado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/LocalResponse'
+ *             example:
+ *               id: 1
+ *               nome: Laboratório de Informática 01
+ *               descricao: Laboratório utilizado para aulas práticas.
+ *               ativo: true
+ *               created_at: '2026-10-27T14:00:00.000Z'
+ *               updated_at: '2026-10-27T14:00:00.000Z'
+ *       '400':
+ *         description: Identificador inválido.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               message: Identificador inválido.
+ *       '404':
+ *         description: Local não encontrado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               message: Local não encontrado.
+ */
+
+localRoutes.get("/:id", localController.show.bind(localController));
+// #endregion
+
 // #region POST /locals
 /**
  * @openapi
@@ -67,16 +123,16 @@ localRoutes.post(
 );
 // #endregion
 
-// #region GET /locals/:id
+// #region DELETE /locals/:id
 /**
  * @openapi
  * /locals/{id}:
- *   get:
+ *   delete:
  *     tags:
  *       - Locals
- *     summary: Buscar local por ID
- *     description: Retorna os dados de um local específico.
- *     operationId: getLocalById
+ *     summary: Excluir local
+ *     description: Exclui um local pelo seu identificador.
+ *     operationId: deleteLocal
  *     parameters:
  *       - in: path
  *         name: id
@@ -87,39 +143,22 @@ localRoutes.post(
  *           minimum: 1
  *         example: 1
  *     responses:
- *       '200':
- *         description: Local encontrado.
- *         content:
- *           application/json:
- *             schema:
- *               $ref: '#/components/schemas/LocalResponse'
- *             example:
- *               id: 1
- *               nome: Laboratório de Informática 01
- *               descricao: Laboratório utilizado para aulas práticas.
- *               ativo: true
- *               created_at: '2026-10-27T14:00:00.000Z'
- *               updated_at: '2026-10-27T14:00:00.000Z'
+ *       '204':
+ *         description: Local excluído com sucesso.
  *       '400':
  *         description: Identificador inválido.
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
- *             example:
- *               status: error
- *               message: Identificador inválido.
  *       '404':
  *         description: Local não encontrado.
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
- *             example:
- *               status: error
- *               message: Local não encontrado.
  */
-localRoutes.get("/:id", localController.show.bind(localController));
+localRoutes.delete("/:id", localController.destroy.bind(localController));
 // #endregion
 
 export default localRoutes;

@@ -11,6 +11,24 @@ class LocalService {
     return database.getRepository(Local);
   }
 
+  // Buscar local por ID
+  async show(id: number): Promise<LocalResponseDTO> {
+    const local = await this.findEntityById(id);
+
+    return this.toResponseDTO(local);
+  }
+
+  // Buscar local por ID (sem padrão de resposta)
+  private async findEntityById(id: number): Promise<Local> {
+    const local = await this.localRepository.findOneBy({ id });
+
+    if (!local) {
+      throw new AppError("Local não encontrado.", 404);
+    }
+
+    return local;
+  }
+
   // Criar local
   async store(createLocalDTO: CreateLocalDTO): Promise<LocalResponseDTO> {
     const { nome, descricao } = createLocalDTO;
@@ -27,11 +45,11 @@ class LocalService {
     return this.toResponseDTO(savedLocal);
   }
 
-  // Buscar local por ID
-  async show(id: number): Promise<LocalResponseDTO> {
+  // Excluir local por ID
+  async destroy(id: number): Promise<void> {
     const local = await this.findEntityById(id);
 
-    return this.toResponseDTO(local);
+    await this.localRepository.remove(local);
   }
 
   // Converter entidade para DTO de resposta
@@ -44,17 +62,6 @@ class LocalService {
       created_at: local.created_at,
       updated_at: local.updated_at,
     };
-  }
-
-  // Buscar local por ID (sem padrão de resposta)
-  private async findEntityById(id: number): Promise<Local> {
-    const local = await this.localRepository.findOneBy({ id });
-
-    if (!local) {
-      throw new AppError("Local não encontrado.", 404);
-    }
-
-    return local;
   }
 
   // Verificar se o nome já está cadastrado
