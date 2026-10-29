@@ -6,7 +6,7 @@ import validateSchema from "../../middlewares/validateSchema";
 import { createLocalSchema } from "./dto/create-local.dto";
 import { updateLocalSchema } from "./dto/update-local.dto";
 
-import { searchParamsSchema } from "../../common/dto/search-params.dto";
+import { searchLocalSchema } from "./dto/search-local.dto";
 import validateQuerySchema from "../../middlewares/validateQuerySchema";
 
 const localRoutes = Router();
@@ -19,11 +19,20 @@ const localRoutes = Router();
  *     tags:
  *       - Locals
  *     summary: Listar locais
- *     description: Lista os locais com paginação e ordenação por identificador.
+ *     description: Lista os locais com busca por nome, paginação e ordenação por identificador.
  *     operationId: indexLocals
  *     parameters:
  *       - in: query
+ *         name: nome
+ *         required: false
+ *         schema:
+ *           type: string
+ *           minLength: 1
+ *         description: Trecho do nome utilizado para filtrar os locais.
+ *         example: Laboratório
+ *       - in: query
  *         name: page
+ *         required: false
  *         schema:
  *           type: integer
  *           minimum: 1
@@ -31,19 +40,21 @@ const localRoutes = Router();
  *         description: Número da página.
  *       - in: query
  *         name: limit
+ *         required: false
  *         schema:
  *           type: integer
  *           minimum: 1
  *           maximum: 100
  *           default: 10
- *         description: Quantidade de registros por página.
+ *         description: Quantidade máxima de registros por página.
  *       - in: query
  *         name: order
+ *         required: false
  *         schema:
  *           type: string
  *           enum: [ASC, DESC]
  *           default: ASC
- *         description: Ordenação pelo identificador do local.
+ *         description: Ordenação dos locais pelo identificador, em ordem crescente ou decrescente.
  *     responses:
  *       '200':
  *         description: Locais listados com sucesso.
@@ -52,7 +63,7 @@ const localRoutes = Router();
  */
 localRoutes.get(
   "/",
-  validateQuerySchema(searchParamsSchema),
+  validateQuerySchema(searchLocalSchema),
   localController.index.bind(localController),
 );
 // #endregion

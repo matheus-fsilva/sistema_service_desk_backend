@@ -1,12 +1,13 @@
 import { Repository } from "typeorm";
+import { Like } from "typeorm";
 import database from "../../config/database.config";
 import AppError from "../../errors/AppError";
 
+import type { SearchLocalDTO } from "./dto/search-local.dto";
 import type { CreateLocalDTO } from "./dto/create-local.dto";
-import type { LocalResponseDTO } from "./dto/local-response.dto";
 import type { UpdateLocalDTO } from "./dto/update-local.dto";
+import type { LocalResponseDTO } from "./dto/local-response.dto";
 
-import type { SearchParamsDTO } from "../../common/dto/search-params.dto";
 import type { PaginatedResponseDTO } from "../../common/dto/paginated-response.dto";
 
 import Local from "./local.entity";
@@ -17,13 +18,14 @@ class LocalService {
     return database.getRepository(Local);
   }
 
-  // Listar locais com paginação e ordenação
+  // Listar locais com busca por nome, paginação e ordenação
   async index(
-    searchParams: SearchParamsDTO,
+    searchParams: SearchLocalDTO,
   ): Promise<PaginatedResponseDTO<LocalResponseDTO>> {
-    const { page, limit, order } = searchParams;
+    const { page, limit, order, nome } = searchParams;
 
     const [locals, total] = await this.localRepository.findAndCount({
+      where: nome ? { nome: Like(`%${nome}%`) } : {},
       order: {
         id: order,
       },
