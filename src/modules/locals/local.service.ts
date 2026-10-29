@@ -3,6 +3,7 @@ import database from "../../config/database.config";
 import AppError from "../../errors/AppError";
 import type { CreateLocalDTO } from "./dto/create-local.dto";
 import type { LocalResponseDTO } from "./dto/local-response.dto";
+import type { UpdateLocalDTO } from "./dto/update-local.dto";
 import Local from "./local.entity";
 
 class LocalService {
@@ -43,6 +44,29 @@ class LocalService {
     const savedLocal = await this.localRepository.save(local);
 
     return this.toResponseDTO(savedLocal);
+  }
+
+  // Atualizar local por ID
+  async update(
+    id: number,
+    updateLocalDTO: UpdateLocalDTO,
+  ): Promise<LocalResponseDTO> {
+    const local = await this.findEntityById(id);
+
+    const { nome, descricao } = updateLocalDTO;
+
+    if (nome !== undefined && nome !== local.nome) {
+      await this.ensureNameAvailable(nome, id);
+      local.nome = nome;
+    }
+
+    if (descricao !== undefined) {
+      local.descricao = descricao;
+    }
+
+    const updatedLocal = await this.localRepository.save(local);
+
+    return this.toResponseDTO(updatedLocal);
   }
 
   // Excluir local por ID

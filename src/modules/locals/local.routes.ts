@@ -4,6 +4,7 @@ import localController from "./local.controller";
 import validateSchema from "../../middlewares/validateSchema";
 
 import { createLocalSchema } from "./dto/create-local.dto";
+import { updateLocalSchema } from "./dto/update-local.dto";
 
 const localRoutes = Router();
 
@@ -120,6 +121,67 @@ localRoutes.post(
   "/",
   validateSchema(createLocalSchema),
   localController.store.bind(localController),
+);
+// #endregion
+
+// #region PUT /locals/:id
+/**
+ * @openapi
+ * /locals/{id}:
+ *   put:
+ *     tags:
+ *       - Locals
+ *     summary: Atualizar local
+ *     description: Atualiza o nome, a descrição ou ambos os campos de um local.
+ *     operationId: updateLocal
+ *     parameters:
+ *       - in: path
+ *         name: id
+ *         required: true
+ *         description: Identificador único do local.
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *         example: 1
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             $ref: '#/components/schemas/UpdateLocal'
+ *           example:
+ *             nome: Laboratório de Informática 02
+ *             descricao: Laboratório atualizado.
+ *     responses:
+ *       '200':
+ *         description: Local atualizado com sucesso.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/LocalResponse'
+ *       '400':
+ *         description: Dados inválidos ou identificador inválido.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       '404':
+ *         description: Local não encontrado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       '409':
+ *         description: Já existe um local com esse nome.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ */
+localRoutes.put(
+  "/:id",
+  validateSchema(updateLocalSchema),
+  localController.update.bind(localController),
 );
 // #endregion
 
