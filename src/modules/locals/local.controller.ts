@@ -1,10 +1,29 @@
 import type { Request, Response } from "express";
+
 import parseId from "../../utils/parseId";
 import localService from "./local.service";
+
 import type { CreateLocalDTO } from "./dto/create-local.dto";
 import type { UpdateLocalDTO } from "./dto/update-local.dto";
 
+import type { SearchParamsDTO } from "../../common/dto/search-params.dto";
+import sendPaginatedListResponse from "../../common/responses/send-paginated-list-response";
+
 class LocalController {
+  // Listar locais
+  async index(_req: Request, res: Response): Promise<void> {
+    const searchParams = res.locals.validatedQuery as SearchParamsDTO;
+
+    const result = await localService.index(searchParams);
+
+    sendPaginatedListResponse(
+      res,
+      result.data,
+      result.pagination,
+      "Locais listados com sucesso.",
+    );
+  }
+
   // Buscar local por ID
   async show(req: Request, res: Response): Promise<void> {
     const id = parseId(req.params.id);

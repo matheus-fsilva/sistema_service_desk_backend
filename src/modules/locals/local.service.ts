@@ -1,15 +1,45 @@
 import { Repository } from "typeorm";
 import database from "../../config/database.config";
 import AppError from "../../errors/AppError";
+
 import type { CreateLocalDTO } from "./dto/create-local.dto";
 import type { LocalResponseDTO } from "./dto/local-response.dto";
 import type { UpdateLocalDTO } from "./dto/update-local.dto";
+
+import type { SearchParamsDTO } from "../../common/dto/search-params.dto";
+import type { PaginatedResponseDTO } from "../../common/dto/paginated-response.dto";
+
 import Local from "./local.entity";
 
 class LocalService {
   // Dependência do repositório
   private get localRepository(): Repository<Local> {
     return database.getRepository(Local);
+  }
+
+  // Listar locais com paginação e ordenação
+  async index(
+    searchParams: SearchParamsDTO,
+  ): Promise<PaginatedResponseDTO<LocalResponseDTO>> {
+    const { page, limit, order } = searchParams;
+
+    const [locals, total] = await this.localRepository.findAndCount({
+      order: {
+        id: order,
+      },
+      skip: (page - 1) * limit,
+      take: limit,
+    });
+
+    return {
+      data: locals.map((local) => this.toResponseDTO(local)),
+      pagination: {
+        page,
+        limit,
+        total,
+        totalPages: Math.ceil(total / limit),
+      },
+    };
   }
 
   // Buscar local por ID

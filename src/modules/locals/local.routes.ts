@@ -6,7 +6,56 @@ import validateSchema from "../../middlewares/validateSchema";
 import { createLocalSchema } from "./dto/create-local.dto";
 import { updateLocalSchema } from "./dto/update-local.dto";
 
+import { searchParamsSchema } from "../../common/dto/search-params.dto";
+import validateQuerySchema from "../../middlewares/validateQuerySchema";
+
 const localRoutes = Router();
+
+// #region GET /locals
+/**
+ * @openapi
+ * /locals:
+ *   get:
+ *     tags:
+ *       - Locals
+ *     summary: Listar locais
+ *     description: Lista os locais com paginação e ordenação por identificador.
+ *     operationId: indexLocals
+ *     parameters:
+ *       - in: query
+ *         name: page
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           default: 1
+ *         description: Número da página.
+ *       - in: query
+ *         name: limit
+ *         schema:
+ *           type: integer
+ *           minimum: 1
+ *           maximum: 100
+ *           default: 10
+ *         description: Quantidade de registros por página.
+ *       - in: query
+ *         name: order
+ *         schema:
+ *           type: string
+ *           enum: [ASC, DESC]
+ *           default: ASC
+ *         description: Ordenação pelo identificador do local.
+ *     responses:
+ *       '200':
+ *         description: Locais listados com sucesso.
+ *       '400':
+ *         description: Parâmetros de consulta inválidos.
+ */
+localRoutes.get(
+  "/",
+  validateQuerySchema(searchParamsSchema),
+  localController.index.bind(localController),
+);
+// #endregion
 
 // #region GET /locals/:id
 /**
