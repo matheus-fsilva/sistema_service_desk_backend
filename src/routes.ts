@@ -6,6 +6,6 @@ const routes = Router();
 
 routes.use("/locals", localRoutes);
 
-routes.use("/equipments", equipmentRoutes);
+routes.use("/equipment", equipmentRoutes);
 
 export default routes;
