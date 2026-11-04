@@ -5,6 +5,7 @@ import userController from "./users.controller";
 import validateSchema from "../../middlewares/validateSchema";
 import validateQuerySchema from "../../middlewares/validateQuerySchema";
 import authMiddleware from "../../middlewares/authMiddleware";
+import ensureUserRole from "../../middlewares/ensureUserRole";
 
 import { createUserSchema } from "./dto/create-user.dto";
 import { updateUserSchema } from "./dto/update-user.dto";
@@ -83,6 +84,7 @@ userRoutes.use(authMiddleware);
  */
 userRoutes.get(
   "/",
+  ensureUserRole("N1", "N2", "Admin"),
   validateQuerySchema(searchUserSchema),
   userController.index.bind(userController),
 );
@@ -115,7 +117,11 @@ userRoutes.get(
  *       '404':
  *         description: Usuário não encontrado.
  */
-userRoutes.get("/:id", userController.show.bind(userController));
+userRoutes.get(
+  "/:id",
+  ensureUserRole("N1", "N2", "Admin"),
+  userController.show.bind(userController),
+);
 // #endregion
 
 // #region POST /users
@@ -150,6 +156,7 @@ userRoutes.get("/:id", userController.show.bind(userController));
  */
 userRoutes.post(
   "/",
+  ensureUserRole("Admin"),
   validateSchema(createUserSchema),
   userController.store.bind(userController),
 );
@@ -197,6 +204,7 @@ userRoutes.post(
  */
 userRoutes.put(
   "/:id",
+  ensureUserRole("Admin"),
   validateSchema(updateUserSchema),
   userController.update.bind(userController),
 );
@@ -229,7 +237,11 @@ userRoutes.put(
  *       '404':
  *         description: Usuário não encontrado.
  */
-userRoutes.delete("/:id", userController.destroy.bind(userController));
+userRoutes.delete(
+  "/:id",
+  ensureUserRole("Admin"),
+  userController.destroy.bind(userController),
+);
 // #endregion
 
 export default userRoutes;
