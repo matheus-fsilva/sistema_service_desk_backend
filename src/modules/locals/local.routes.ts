@@ -5,6 +5,7 @@ import localController from "./local.controller";
 import validateSchema from "../../middlewares/validateSchema";
 import validateQuerySchema from "../../middlewares/validateQuerySchema";
 import authMiddleware from "../../middlewares/authMiddleware";
+import ensureUserRole from "../../middlewares/ensureUserRole";
 
 import { createLocalSchema } from "./dto/create-local.dto";
 import { updateLocalSchema } from "./dto/update-local.dto";
@@ -66,6 +67,7 @@ localRoutes.use(authMiddleware);
  */
 localRoutes.get(
   "/",
+  ensureUserRole("N1", "N2", "Admin"),
   validateQuerySchema(searchLocalSchema),
   localController.index.bind(localController),
 );
@@ -124,7 +126,11 @@ localRoutes.get(
  *               message: Local não encontrado.
  */
 
-localRoutes.get("/:id", localController.show.bind(localController));
+localRoutes.get(
+  "/:id",
+  ensureUserRole("N1", "N2", "Admin"),
+  localController.show.bind(localController),
+);
 // #endregion
 
 // #region POST /locals
@@ -182,6 +188,7 @@ localRoutes.get("/:id", localController.show.bind(localController));
  */
 localRoutes.post(
   "/",
+  ensureUserRole("Admin"),
   validateSchema(createLocalSchema),
   localController.store.bind(localController),
 );
@@ -243,6 +250,7 @@ localRoutes.post(
  */
 localRoutes.put(
   "/:id",
+  ensureUserRole("Admin"),
   validateSchema(updateLocalSchema),
   localController.update.bind(localController),
 );
@@ -283,7 +291,11 @@ localRoutes.put(
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
  */
-localRoutes.delete("/:id", localController.destroy.bind(localController));
+localRoutes.delete(
+  "/:id",
+  ensureUserRole("Admin"),
+  localController.destroy.bind(localController),
+);
 // #endregion
 
 export default localRoutes;
