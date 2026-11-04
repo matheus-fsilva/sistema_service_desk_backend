@@ -105,7 +105,8 @@ class LocalService {
   async destroy(id: number): Promise<void> {
     const local = await this.findEntityById(id);
 
-    await this.localRepository.remove(local);
+    local.ativo = false;
+    await this.localRepository.save(local);
   }
 
   // Converter entidade para DTO de resposta
