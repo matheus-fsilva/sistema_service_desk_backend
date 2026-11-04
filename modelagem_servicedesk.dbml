@@ -11,10 +11,11 @@ Table usuario {
 
 Table chamado {
   id int [pk, increment]
+  id_solicitante char(13) [not null]
   id_local int [ref: > local.id]
   id_equipamento int [ref: > equipamento.id]
+  id_tecnico_atribuido int [ref: > usuario.id]
   id_tecnico_resolucao int [ref: > usuario.id]
-  ra_solicitante char(13) [not null]
   titulo varchar(150) [not null]
   descricao text [not null]
   tipo varchar(20) [not null]
@@ -25,6 +26,14 @@ Table chamado {
   data_fechamento datetime
   created_at datetime [not null, default: `CURRENT_TIMESTAMP`]
   updated_at datetime [not null, default: `CURRENT_TIMESTAMP`]
+}
+
+Table chamado_comentario {
+  id int [pk, increment]
+  id_chamado int [not null, ref: > chamado.id]
+  id_usuario int [not null, ref: > usuario.id]
+  comentario text [not null]
+  created_at datetime [not null, default: `CURRENT_TIMESTAMP`]
 }
 
 Table local {

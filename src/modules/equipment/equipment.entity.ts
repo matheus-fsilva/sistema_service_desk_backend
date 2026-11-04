@@ -10,7 +10,7 @@ import {
 
 import Local from "../locals/local.entity";
 
-@Entity({ name: "equipamento" })
+@Entity({ name: "equipment" })
 export default class Equipment {
   @PrimaryGeneratedColumn()
   id!: number;
