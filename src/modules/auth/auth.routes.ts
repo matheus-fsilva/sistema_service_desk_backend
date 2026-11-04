@@ -15,6 +15,7 @@ const authRoutes = Router();
  *       - Auth
  *     summary: Autenticar usuário
  *     description: Realiza o login e retorna os dados do usuário e o Access Token.
+ *     security: []
  *     requestBody:
  *       required: true
  *       content:

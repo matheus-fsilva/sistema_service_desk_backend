@@ -21,7 +21,22 @@ export const swaggerDefinition = {
 
   tags: [],
 
+  security: [
+    {
+      BearerAuth: [],
+    },
+  ],
+
   components: {
+    securitySchemes: {
+      BearerAuth: {
+        type: "http",
+        scheme: "bearer",
+        bearerFormat: "JWT",
+        description: "Informe o Access Token obtido no endpoint /auth/login.",
+      },
+    },
+
     schemas: {
       ErrorResponse: {
         type: "object",
@@ -75,7 +90,6 @@ export const swaggerDefinition = {
           senha: {
             type: "string",
             minLength: 8,
-            maxLength: 72,
             example: "Senha123!",
             description:
               "Mínimo de 8 caracteres, com letra maiúscula, minúscula, número e caractere especial. Limite de 72 bytes.",
@@ -90,6 +104,7 @@ export const swaggerDefinition = {
 
       UpdateUser: {
         type: "object",
+        minProperties: 1,
         properties: {
           nome: {
             type: "string",
@@ -105,10 +120,9 @@ export const swaggerDefinition = {
           senha: {
             type: "string",
             minLength: 8,
-            maxLength: 72,
             example: "NovaSenha123!",
             description:
-              "Quando informada, deve atender aos critérios de segurança da senha.",
+              "Quando informada, deve atender aos critérios de segurança da senha. Limite de 72 bytes.",
           },
           tipo: {
             type: "string",
@@ -120,7 +134,6 @@ export const swaggerDefinition = {
             example: true,
           },
         },
-        minProperties: 1,
       },
 
       LocalResponse: {

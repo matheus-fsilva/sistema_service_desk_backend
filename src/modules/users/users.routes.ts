@@ -4,12 +4,15 @@ import userController from "./users.controller";
 
 import validateSchema from "../../middlewares/validateSchema";
 import validateQuerySchema from "../../middlewares/validateQuerySchema";
+import authMiddleware from "../../middlewares/authMiddleware";
 
 import { createUserSchema } from "./dto/create-user.dto";
 import { updateUserSchema } from "./dto/update-user.dto";
 import { searchUserSchema } from "./dto/search-user.dto";
 
 const userRoutes = Router();
+
+userRoutes.use(authMiddleware);
 
 // #region GET /users
 /**
