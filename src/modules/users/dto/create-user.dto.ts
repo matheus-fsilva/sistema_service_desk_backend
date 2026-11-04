@@ -1,5 +1,6 @@
 import { z } from "zod";
 import normalizedString from "../../../utils/validators/normalizedString";
+import passwordSchema from "../../../utils/validators/passwordSchema";
 
 export const createUserSchema = z.object({
   nome: normalizedString().max(
@@ -14,10 +15,7 @@ export const createUserSchema = z.object({
     .max(150, "O e-mail deve possuir no máximo 150 caracteres.")
     .transform((value) => value.toLowerCase()),
 
-  senha: z
-    .string()
-    .min(8, "A senha deve possuir no mínimo 8 caracteres.")
-    .max(72, "A senha deve possuir no máximo 72 caracteres."),
+  senha: passwordSchema,
 
   tipo: z.enum(["Usuario", "N1", "N2", "Admin"], {
     message: "Informe um tipo de usuário válido.",

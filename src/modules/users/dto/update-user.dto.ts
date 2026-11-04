@@ -1,5 +1,6 @@
 import { z } from "zod";
 import normalizedString from "../../../utils/validators/normalizedString";
+import passwordSchema from "../../../utils/validators/passwordSchema";
 
 export const updateUserSchema = z
   .object({
@@ -15,11 +16,7 @@ export const updateUserSchema = z
       .transform((value) => value.toLowerCase())
       .optional(),
 
-    senha: z
-      .string()
-      .min(8, "A senha deve possuir no mínimo 8 caracteres.")
-      .max(72, "A senha deve possuir no máximo 72 caracteres.")
-      .optional(),
+    senha: passwordSchema.optional(),
 
     tipo: z
       .enum(["Usuario", "N1", "N2", "Admin"], {
