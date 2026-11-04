@@ -4,12 +4,15 @@ import equipmentController from "./equipment.controller";
 
 import validateSchema from "../../middlewares/validateSchema";
 import validateQuerySchema from "../../middlewares/validateQuerySchema";
+import authMiddleware from "../../middlewares/authMiddleware";
 
 import { createEquipmentSchema } from "./dto/create-equipment.dto";
 import { updateEquipmentSchema } from "./dto/update-equipment.dto";
 import { searchEquipmentSchema } from "./dto/search-equipment.dto";
 
 const equipmentRoutes = Router();
+
+equipmentRoutes.use(authMiddleware);
 
 // #region GET /equipment
 /**

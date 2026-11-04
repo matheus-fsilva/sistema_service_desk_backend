@@ -1,15 +1,18 @@
 import { Router } from "express";
 
 import localController from "./local.controller";
+
 import validateSchema from "../../middlewares/validateSchema";
+import validateQuerySchema from "../../middlewares/validateQuerySchema";
+import authMiddleware from "../../middlewares/authMiddleware";
 
 import { createLocalSchema } from "./dto/create-local.dto";
 import { updateLocalSchema } from "./dto/update-local.dto";
-
 import { searchLocalSchema } from "./dto/search-local.dto";
-import validateQuerySchema from "../../middlewares/validateQuerySchema";
 
 const localRoutes = Router();
+
+localRoutes.use(authMiddleware);
 
 // #region GET /locals
 /**
