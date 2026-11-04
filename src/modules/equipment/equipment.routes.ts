@@ -5,6 +5,7 @@ import equipmentController from "./equipment.controller";
 import validateSchema from "../../middlewares/validateSchema";
 import validateQuerySchema from "../../middlewares/validateQuerySchema";
 import authMiddleware from "../../middlewares/authMiddleware";
+import ensureUserRole from "../../middlewares/ensureUserRole";
 
 import { createEquipmentSchema } from "./dto/create-equipment.dto";
 import { updateEquipmentSchema } from "./dto/update-equipment.dto";
@@ -66,6 +67,7 @@ equipmentRoutes.use(authMiddleware);
  */
 equipmentRoutes.get(
   "/",
+  ensureUserRole("N1", "N2", "Admin"),
   validateQuerySchema(searchEquipmentSchema),
   equipmentController.index.bind(equipmentController),
 );
@@ -98,7 +100,11 @@ equipmentRoutes.get(
  *       '404':
  *         description: Equipamento não encontrado.
  */
-equipmentRoutes.get("/:id", equipmentController.show.bind(equipmentController));
+equipmentRoutes.get(
+  "/:id",
+  ensureUserRole("N1", "N2", "Admin"),
+  equipmentController.show.bind(equipmentController),
+);
 // #endregion
 
 // #region POST /equipment
@@ -134,6 +140,7 @@ equipmentRoutes.get("/:id", equipmentController.show.bind(equipmentController));
  */
 equipmentRoutes.post(
   "/",
+  ensureUserRole("Admin"),
   validateSchema(createEquipmentSchema),
   equipmentController.store.bind(equipmentController),
 );
@@ -180,6 +187,7 @@ equipmentRoutes.post(
  */
 equipmentRoutes.put(
   "/:id",
+  ensureUserRole("Admin"),
   validateSchema(updateEquipmentSchema),
   equipmentController.update.bind(equipmentController),
 );

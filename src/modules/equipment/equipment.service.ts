@@ -123,11 +123,13 @@ class EquipmentService {
     return this.toResponseDTO(updatedEquipment);
   }
 
-  // Excluir equipamento por ID
+  // Desativar equipamento por ID
   async destroy(id: number): Promise<void> {
     const equipment = await this.findEntityById(id);
 
-    await this.equipmentRepository.remove(equipment);
+    equipment.ativo = false;
+
+    await this.equipmentRepository.save(equipment);
   }
 
   // Buscar local por ID
