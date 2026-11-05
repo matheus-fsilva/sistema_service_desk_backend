@@ -1,27 +1,29 @@
-import { z } from "zod";
-import normalizedString from "../../../utils/validators/normalizedString";
+import {
+  TicketTipo,
+  TicketStatus,
+  TicketPrioridade,
+  TicketNivel,
+} from "../ticket.entity";
 
-export const createTicketSchema = z.object({
-  titulo: normalizedString().max(
-    150,
-    "O título deve possuir no máximo 150 caracteres.",
-  ),
+export interface TicketResponseDTO {
+  id: number;
 
-  descricao: z.string().trim().min(1, "A descrição não pode ficar vazia."),
+  id_solicitante: number;
+  id_local: number | null;
+  id_equipamento: number | null;
+  id_tecnico_atribuido: number | null;
+  id_tecnico_resolucao: number | null;
 
-  tipo: z.enum(["Hardware", "Software"], {
-    message: "O tipo deve ser Hardware ou Software.",
-  }),
+  titulo: string;
+  descricao: string;
+  tipo: TicketTipo;
+  status: TicketStatus;
+  prioridade: TicketPrioridade;
+  nivel_atendimento: TicketNivel;
 
-  prioridade: z.enum(["Baixa", "Média", "Alta", "Crítica"], {
-    message: "Informe uma prioridade válida.",
-  }),
+  data_abertura: Date;
+  data_fechamento: Date | null;
 
-  id_local: z.number().int().positive().nullable().optional(),
-
-  id_equipamento: z.number().int().positive().nullable().optional(),
-
-  nivel_atendimento: z.enum(["N1", "N2"]).optional(),
-});
-
-export type CreateTicketDTO = z.infer<typeof createTicketSchema>;
+  created_at: Date;
+  updated_at: Date;
+}

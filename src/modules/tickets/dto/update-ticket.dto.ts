@@ -17,9 +17,7 @@ export const updateTicketSchema = z
 
     prioridade: z.enum(["Baixa", "Média", "Alta", "Crítica"]).optional(),
 
-    status: z
-      .enum(["Aberto", "Em andamento", "Fechado", "Cancelado"])
-      .optional(),
+    status: z.enum(["Aberto", "Em andamento", "Fechado"]).optional(),
 
     nivel_atendimento: z.enum(["N1", "N2"]).optional(),
 
