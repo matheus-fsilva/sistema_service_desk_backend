@@ -12,7 +12,7 @@ import {
 import User from "../users/users.entity";
 import Local from "../locals/local.entity";
 import Equipment from "../equipment/equipment.entity";
-import TicketComment from "./ticketComment.entity";
+import TicketComment from "../ticketComments/ticketComment.entity";
 
 export type TicketTipo = "Hardware" | "Software";
 
@@ -119,14 +119,16 @@ export default class Ticket {
 
   // Datas
 
-  @CreateDateColumn({
+  @Column({
     name: "data_abertura",
     type: "datetime",
+    default: () => "CURRENT_TIMESTAMP",
     nullable: false,
   })
   data_abertura!: Date;
 
   @Column({
+    name: "data_fechamento",
     type: "datetime",
     nullable: true,
   })
