@@ -90,6 +90,106 @@ userRoutes.get(
 );
 // #endregion
 
+// #region GET /users/type/usuario
+/**
+ * @openapi
+ * /users/type/usuario:
+ *   get:
+ *     tags:
+ *       - Users
+ *     summary: Listar usuários comuns
+ *     description: Lista todos os usuários comuns ativos.
+ *     operationId: indexRegularUsers
+ *     responses:
+ *       '200':
+ *         description: Usuários comuns listados com sucesso.
+ *       '401':
+ *         description: Usuário não autenticado.
+ *       '403':
+ *         description: Usuário sem permissão.
+ */
+userRoutes.get(
+  "/type/usuario",
+  ensureUserRole("N1", "N2", "Admin"),
+  userController.indexRegularUsers.bind(userController),
+);
+// #endregion
+
+// #region GET /users/type/n1
+/**
+ * @openapi
+ * /users/type/n1:
+ *   get:
+ *     tags:
+ *       - Users
+ *     summary: Listar usuários N1
+ *     description: Lista todos os usuários N1 ativos.
+ *     operationId: indexN1Users
+ *     responses:
+ *       '200':
+ *         description: Usuários N1 listados com sucesso.
+ *       '401':
+ *         description: Usuário não autenticado.
+ *       '403':
+ *         description: Usuário sem permissão.
+ */
+userRoutes.get(
+  "/type/n1",
+  ensureUserRole("N1", "N2", "Admin"),
+  userController.indexN1Users.bind(userController),
+);
+// #endregion
+
+// #region GET /users/type/n2
+/**
+ * @openapi
+ * /users/type/n2:
+ *   get:
+ *     tags:
+ *       - Users
+ *     summary: Listar usuários N2
+ *     description: Lista todos os usuários N2 ativos.
+ *     operationId: indexN2Users
+ *     responses:
+ *       '200':
+ *         description: Usuários N2 listados com sucesso.
+ *       '401':
+ *         description: Usuário não autenticado.
+ *       '403':
+ *         description: Usuário sem permissão.
+ */
+userRoutes.get(
+  "/type/n2",
+  ensureUserRole("N1", "N2", "Admin"),
+  userController.indexN2Users.bind(userController),
+);
+// #endregion
+
+// #region GET /users/type/admin
+/**
+ * @openapi
+ * /users/type/admin:
+ *   get:
+ *     tags:
+ *       - Users
+ *     summary: Listar administradores
+ *     description: Lista todos os administradores ativos.
+ *     operationId: indexAdminUsers
+ *     responses:
+ *       '200':
+ *         description: Administradores listados com sucesso.
+ *       '401':
+ *         description: Usuário não autenticado.
+ *       '403':
+ *         description: Usuário sem permissão.
+ */
+userRoutes.get(
+  "/type/admin",
+  ensureUserRole("N1", "N2", "Admin"),
+  userController.indexAdminUsers.bind(userController),
+);
+// #endregion
+
 // #region GET /users/:id
 /**
  * @openapi

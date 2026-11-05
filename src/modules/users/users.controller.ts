@@ -24,6 +24,34 @@ class UserController {
     );
   }
 
+  // Listar usuários comuns ativos
+  async indexRegularUsers(_req: Request, res: Response): Promise<void> {
+    const users = await userService.indexRegularUsers();
+
+    res.status(200).json(users);
+  }
+
+  // Listar usuários N1 ativos
+  async indexN1Users(_req: Request, res: Response): Promise<void> {
+    const users = await userService.indexN1Users();
+
+    res.status(200).json(users);
+  }
+
+  // Listar usuários N2 ativos
+  async indexN2Users(_req: Request, res: Response): Promise<void> {
+    const users = await userService.indexN2Users();
+
+    res.status(200).json(users);
+  }
+
+  // Listar administradores ativos
+  async indexAdminUsers(_req: Request, res: Response): Promise<void> {
+    const users = await userService.indexAdminUsers();
+
+    res.status(200).json(users);
+  }
+
   // Buscar usuário por ID
   async show(req: Request, res: Response): Promise<void> {
     const id = parseId(req.params.id);

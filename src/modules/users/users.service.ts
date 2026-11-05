@@ -50,6 +50,43 @@ class UserService {
     };
   }
 
+  // Listar usuários comuns ativos
+  async indexRegularUsers(): Promise<UserResponseDTO[]> {
+    return this.indexUsersByType("Usuario");
+  }
+
+  // Listar usuários N1 ativos
+  async indexN1Users(): Promise<UserResponseDTO[]> {
+    return this.indexUsersByType("N1");
+  }
+
+  // Listar usuários N2 ativos
+  async indexN2Users(): Promise<UserResponseDTO[]> {
+    return this.indexUsersByType("N2");
+  }
+
+  // Listar administradores ativos
+  async indexAdminUsers(): Promise<UserResponseDTO[]> {
+    return this.indexUsersByType("Admin");
+  }
+
+  // Buscar usuários ativos por tipo
+  private async indexUsersByType(
+    tipo: User["tipo"],
+  ): Promise<UserResponseDTO[]> {
+    const users = await this.userRepository.find({
+      where: {
+        tipo,
+        ativo: true,
+      },
+      order: {
+        id: "ASC",
+      },
+    });
+
+    return users.map((user) => this.toResponseDTO(user));
+  }
+
   // Buscar usuário por ID
   async show(id: number): Promise<UserResponseDTO> {
     const user = await this.findEntityById(id);
