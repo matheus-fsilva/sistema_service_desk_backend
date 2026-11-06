@@ -27,10 +27,12 @@ ticketRoutes.use(authMiddleware);
  *     description: >
  *       Lista os chamados de acordo com o perfil do usuário autenticado,
  *       permitindo filtros, paginação e ordenação.
- *       Usuários consultam apenas seus próprios chamados.
- *       N1 consulta chamados do nível N1 e seus próprios chamados.
- *       N2 consulta chamados dos níveis N1 e N2 e seus próprios chamados.
- *       Admin possui acesso a todos os chamados.
+ *
+ *       Regras de acesso:
+ *       - Usuario: consulta somente os próprios chamados.
+ *       - N1: consulta chamados do nível N1 e seus próprios chamados.
+ *       - N2: consulta chamados dos níveis N1 e N2 e seus próprios chamados.
+ *       - Admin: consulta todos os chamados.
  *     operationId: indexTickets
  *     parameters:
  *       - in: query
@@ -75,6 +77,7 @@ ticketRoutes.use(authMiddleware);
  *           type: integer
  *           minimum: 1
  *         description: Identificador do usuário solicitante.
+ *         example: 2
  *       - in: query
  *         name: id_local
  *         required: false
@@ -82,6 +85,7 @@ ticketRoutes.use(authMiddleware);
  *           type: integer
  *           minimum: 1
  *         description: Identificador do local relacionado ao chamado.
+ *         example: 1
  *       - in: query
  *         name: id_tecnico_atribuido
  *         required: false
@@ -89,6 +93,7 @@ ticketRoutes.use(authMiddleware);
  *           type: integer
  *           minimum: 1
  *         description: Identificador do técnico atualmente atribuído.
+ *         example: 3
  *       - in: query
  *         name: page
  *         required: false
@@ -117,8 +122,41 @@ ticketRoutes.use(authMiddleware);
  *     responses:
  *       '200':
  *         description: Chamados listados com sucesso.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/TicketListResponse'
+ *             example:
+ *               status: success
+ *               message: Chamados listados com sucesso.
+ *               data:
+ *                 - id: 1
+ *                   id_solicitante: 2
+ *                   id_local: 1
+ *                   id_equipamento: 1
+ *                   id_tecnico_atribuido: 3
+ *                   id_tecnico_resolucao: null
+ *                   titulo: Computador não liga
+ *                   descricao: O computador do laboratório não está ligando.
+ *                   tipo: Hardware
+ *                   status: Aberto
+ *                   prioridade: Média
+ *                   nivel_atendimento: N1
+ *                   data_abertura: '2026-11-06T12:00:00.000Z'
+ *                   data_fechamento: null
+ *                   created_at: '2026-11-06T12:00:00.000Z'
+ *                   updated_at: '2026-11-06T12:00:00.000Z'
+ *               pagination:
+ *                 page: 1
+ *                 limit: 10
+ *                 total: 25
+ *                 totalPages: 3
  *       '400':
  *         description: Parâmetros de consulta inválidos.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       '401':
  *         description: Usuário não autenticado.
  */
@@ -141,6 +179,11 @@ ticketRoutes.get(
  *     description: >
  *       Retorna os dados de um chamado específico, respeitando as regras
  *       de acesso do perfil do usuário autenticado.
+ *
+ *       Usuarios consultam somente os próprios chamados.
+ *       N1 consulta chamados N1 e os próprios chamados N2.
+ *       N2 consulta chamados N1, N2 e os próprios chamados.
+ *       Admin possui acesso irrestrito.
  *     operationId: getTicketById
  *     parameters:
  *       - in: path
@@ -183,10 +226,17 @@ ticketRoutes.get(
  *       - Tickets
  *     summary: Criar chamado
  *     description: >
- *       Cadastra um novo chamado. O solicitante é definido automaticamente
- *       pelo usuário autenticado. Chamados criados por usuários comuns
- *       são encaminhados inicialmente ao nível N1. Usuários de suporte
- *       e administradores podem definir o nível inicial.
+ *       Cadastra um novo chamado.
+ *
+ *       O solicitante é definido automaticamente pelo usuário autenticado.
+ *       Não é necessário informar o identificador do solicitante.
+ *
+ *       Chamados criados por usuários comuns são encaminhados inicialmente
+ *       ao nível N1. N1, N2 e Admin podem definir o nível inicial.
+ *
+ *       Para chamados do tipo Hardware, o local é obrigatório.
+ *       O equipamento informado deve pertencer ao local selecionado.
+ *       Para chamados do tipo Software, o local é opcional.
  *     operationId: createTicket
  *     requestBody:
  *       required: true
@@ -211,12 +261,14 @@ ticketRoutes.get(
  *               $ref: '#/components/schemas/TicketResponse'
  *       '400':
  *         description: Dados inválidos ou incompatíveis.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       '401':
  *         description: Usuário não autenticado.
  *       '404':
  *         description: Local ou equipamento não encontrado.
- *       '409':
- *         description: Conflito com os dados informados.
  */
 ticketRoutes.post(
   "/",
@@ -235,9 +287,18 @@ ticketRoutes.post(
  *       - Tickets
  *     summary: Atualizar chamado
  *     description: >
- *       Atualiza os dados de um chamado. Operação disponível para N1,
- *       N2 e Admin, respeitando as permissões de gerenciamento de cada nível.
+ *       Atualiza os dados de um chamado.
+ *
+ *       Operação disponível para N1, N2 e Admin, respeitando as permissões
+ *       de gerenciamento de cada nível.
+ *
+ *       N1 gerencia chamados N1. N2 gerencia chamados N1 e N2.
+ *       Admin pode gerenciar todos os chamados.
+ *
+ *       É necessário informar pelo menos um campo para atualização.
  *       Chamados fechados ou cancelados não podem ser alterados.
+ *       O encerramento registra automaticamente o técnico responsável
+ *       e a data de fechamento.
  *     operationId: updateTicket
  *     parameters:
  *       - in: path
@@ -268,6 +329,10 @@ ticketRoutes.post(
  *               $ref: '#/components/schemas/TicketResponse'
  *       '400':
  *         description: Dados inválidos ou chamado não pode ser alterado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       '401':
  *         description: Usuário não autenticado.
  *       '403':
@@ -293,10 +358,16 @@ ticketRoutes.put(
  *     summary: Cancelar chamado
  *     description: >
  *       Cancela um chamado mediante justificativa.
+ *
  *       Usuários comuns podem cancelar seus próprios chamados enquanto
- *       estiverem abertos. N1 e N2 podem cancelar chamados que podem gerenciar.
- *       Admin pode cancelar qualquer chamado. A justificativa é registrada
- *       automaticamente como comentário do chamado.
+ *       estiverem abertos.
+ *
+ *       N1 e N2 podem cancelar chamados que possuem permissão para gerenciar.
+ *       Admin pode cancelar qualquer chamado.
+ *
+ *       A justificativa é registrada automaticamente como comentário
+ *       do chamado. Chamados fechados ou já cancelados não podem
+ *       ser cancelados novamente.
  *     operationId: cancelTicket
  *     parameters:
  *       - in: path
@@ -325,6 +396,10 @@ ticketRoutes.put(
  *               $ref: '#/components/schemas/TicketResponse'
  *       '400':
  *         description: Justificativa inválida ou chamado não pode ser cancelado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       '401':
  *         description: Usuário não autenticado.
  *       '403':

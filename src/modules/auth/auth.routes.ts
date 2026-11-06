@@ -21,24 +21,26 @@ const authRoutes = Router();
  *       content:
  *         application/json:
  *           schema:
- *             type: object
- *             required:
- *               - email
- *               - senha
- *             properties:
- *               email:
- *                 type: string
- *                 example: joao.silva@fatec.sp.gov.br
- *               senha:
- *                 type: string
- *                 example: Senha123!
+ *             $ref: "#/components/schemas/LoginRequest"
  *     responses:
  *       200:
  *         description: Autenticação realizada com sucesso.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: "#/components/schemas/AuthResponse"
+ *       400:
+ *         description: Dados enviados inválidos.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: "#/components/schemas/ErrorResponse"
  *       401:
  *         description: E-mail ou senha inválidos.
- *       422:
- *         description: Dados enviados inválidos.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: "#/components/schemas/ErrorResponse"
  */
 authRoutes.post("/login", validateSchema(loginSchema), authController.login);
 

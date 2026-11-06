@@ -23,7 +23,10 @@ ticketCommentRoutes.use(authMiddleware);
  *     description: >
  *       Retorna os comentários de um chamado específico,
  *       respeitando as permissões de visualização do usuário autenticado.
+ *
  *       Os comentários são apresentados em ordem cronológica.
+ *       Todos os comentários são públicos e podem ser visualizados
+ *       pelo solicitante e pela equipe de suporte que possui acesso ao chamado.
  *     operationId: indexTicketComments
  *     parameters:
  *       - in: path
@@ -48,7 +51,7 @@ ticketCommentRoutes.use(authMiddleware);
  *                 id_chamado: 1
  *                 id_usuario: 2
  *                 comentario: O suporte está verificando o problema.
- *                 created_at: '2026-10-27T14:30:00.000Z'
+ *                 created_at: '2026-11-06T12:30:00.000Z'
  *       '400':
  *         description: Identificador inválido.
  *         content:
@@ -79,9 +82,13 @@ ticketCommentRoutes.get(
  *     summary: Criar comentário em um chamado
  *     description: >
  *       Registra um comentário em um chamado específico.
+ *
  *       O usuário responsável pelo comentário é identificado automaticamente
  *       pelo token de autenticação.
+ *
  *       Não é permitido comentar em chamados fechados ou cancelados.
+ *       O comentário é público e poderá ser visualizado pelo solicitante
+ *       e pelos usuários de suporte com acesso ao chamado.
  *     operationId: createTicketComment
  *     parameters:
  *       - in: path
@@ -113,7 +120,7 @@ ticketCommentRoutes.get(
  *               id_chamado: 1
  *               id_usuario: 2
  *               comentario: O problema continua acontecendo após reiniciar o computador.
- *               created_at: '2026-10-27T15:00:00.000Z'
+ *               created_at: '2026-11-06T15:00:00.000Z'
  *       '400':
  *         description: Comentário inválido ou chamado fechado ou cancelado.
  *         content:
