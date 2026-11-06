@@ -130,11 +130,27 @@ class UserService {
   async update(
     id: number,
     updateUserDTO: UpdateUserDTO,
+    authenticatedUserId: number,
   ): Promise<UserResponseDTO> {
     const user = await this.findEntityById(id);
 
     const { nome, senha, tipo, ativo } = updateUserDTO;
     const email = updateUserDTO.email?.toLowerCase();
+
+    // Impedir que o usuário desative a própria conta
+    if (authenticatedUserId === id && ativo === false) {
+      throw new AppError("Você não pode desativar a própria conta.", 403);
+    }
+
+    // Verificar se a atualização removerá o último administrador ativo
+    const willRemoveAdmin =
+      user.tipo === "Admin" &&
+      user.ativo &&
+      ((tipo !== undefined && tipo !== "Admin") || ativo === false);
+
+    if (willRemoveAdmin) {
+      await this.ensureNotLastActiveAdmin();
+    }
 
     if (nome !== undefined) {
       user.nome = nome;
@@ -163,12 +179,39 @@ class UserService {
   }
 
   // Desativar usuário por ID
-  async destroy(id: number): Promise<void> {
+  async destroy(id: number, authenticatedUserId: number): Promise<void> {
     const user = await this.findEntityById(id);
+
+    // Impedir que o usuário desative a própria conta
+    if (authenticatedUserId === id) {
+      throw new AppError("Você não pode desativar a própria conta.", 403);
+    }
+
+    // Verificar se o usuário é o último administrador ativo
+    if (user.tipo === "Admin" && user.ativo) {
+      await this.ensureNotLastActiveAdmin();
+    }
 
     user.ativo = false;
 
     await this.userRepository.save(user);
+  }
+
+  // Verificar se existe mais de um administrador ativo
+  private async ensureNotLastActiveAdmin(): Promise<void> {
+    const activeAdminCount = await this.userRepository.count({
+      where: {
+        tipo: "Admin",
+        ativo: true,
+      },
+    });
+
+    if (activeAdminCount <= 1) {
+      throw new AppError(
+        "Não é possível realizar esta operação porque o usuário é o último administrador ativo do sistema.",
+        409,
+      );
+    }
   }
 
   // Converter entidade para DTO de resposta

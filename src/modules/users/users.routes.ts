@@ -49,7 +49,8 @@ userRoutes.use(authMiddleware);
  *         name: ativo
  *         required: false
  *         schema:
- *           type: boolean
+ *           type: string
+ *           enum: ["true", "false"]
  *         description: Filtra usuários ativos ou inativos.
  *       - in: query
  *         name: page
@@ -81,6 +82,10 @@ userRoutes.use(authMiddleware);
  *         description: Usuários listados com sucesso.
  *       '400':
  *         description: Parâmetros de consulta inválidos.
+ *       '401':
+ *         description: Usuário não autenticado.
+ *       '403':
+ *         description: Usuário sem permissão.
  */
 userRoutes.get(
   "/",
@@ -214,6 +219,10 @@ userRoutes.get(
  *         description: Usuário encontrado.
  *       '400':
  *         description: Identificador inválido.
+ *       '401':
+ *         description: Usuário não autenticado.
+ *       '403':
+ *         description: Usuário sem permissão.
  *       '404':
  *         description: Usuário não encontrado.
  */
@@ -251,6 +260,10 @@ userRoutes.get(
  *         description: Usuário cadastrado com sucesso.
  *       '400':
  *         description: Dados da requisição inválidos.
+ *       '401':
+ *         description: Usuário não autenticado.
+ *       '403':
+ *         description: Somente administradores podem cadastrar usuários.
  *       '409':
  *         description: E-mail já cadastrado.
  */
@@ -297,10 +310,14 @@ userRoutes.post(
  *         description: Usuário atualizado com sucesso.
  *       '400':
  *         description: Dados inválidos ou identificador inválido.
+ *       '401':
+ *         description: Usuário não autenticado.
+ *       '403':
+ *         description: Operação não permitida, incluindo tentativa de desativar a própria conta.
  *       '404':
  *         description: Usuário não encontrado.
  *       '409':
- *         description: E-mail já cadastrado.
+ *         description: E-mail já cadastrado ou tentativa de remover o último administrador ativo.
  */
 userRoutes.put(
   "/:id",
@@ -318,7 +335,7 @@ userRoutes.put(
  *     tags:
  *       - Users
  *     summary: Excluir usuário
- *     description: Exclui um usuário pelo seu identificador.
+ *     description: Realiza a exclusão lógica de um usuário, alterando seu campo ativo para false.
  *     operationId: deleteUser
  *     parameters:
  *       - in: path
@@ -331,11 +348,17 @@ userRoutes.put(
  *         example: 1
  *     responses:
  *       '204':
- *         description: Usuário excluído com sucesso.
+ *         description: Usuário excluído logicamente com sucesso.
  *       '400':
  *         description: Identificador inválido.
+ *       '401':
+ *         description: Usuário não autenticado.
+ *       '403':
+ *         description: Operação não permitida, incluindo tentativa de desativar a própria conta.
  *       '404':
  *         description: Usuário não encontrado.
+ *       '409':
+ *         description: Não é possível desativar o último administrador ativo.
  */
 userRoutes.delete(
   "/:id",

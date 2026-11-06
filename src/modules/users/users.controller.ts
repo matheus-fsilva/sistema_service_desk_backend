@@ -1,8 +1,10 @@
 import type { Request, Response } from "express";
 
+import AppError from "../../errors/AppError";
 import parseId from "../../utils/parseId";
 import userService from "./users.service";
 
+import type User from "./users.entity";
 import type { SearchUserDTO } from "./dto/search-user.dto";
 import type { CreateUserDTO } from "./dto/create-user.dto";
 import type { UpdateUserDTO } from "./dto/update-user.dto";
@@ -10,6 +12,15 @@ import type { UpdateUserDTO } from "./dto/update-user.dto";
 import sendPaginatedListResponse from "../../common/responses/send-paginated-list-response";
 
 class UserController {
+  // Obter usuário autenticado
+  private getAuthenticatedUser(req: Request): User {
+    if (!req.user) {
+      throw new AppError("Usuário não autenticado.", 401);
+    }
+
+    return req.user;
+  }
+
   // Listar usuários com busca, paginação e ordenação
   async index(_req: Request, res: Response): Promise<void> {
     const searchParams = res.locals.validatedQuery as SearchUserDTO;
@@ -71,17 +82,23 @@ class UserController {
   // Atualizar usuário por ID
   async update(req: Request, res: Response): Promise<void> {
     const id = parseId(req.params.id);
+    const authenticatedUser = this.getAuthenticatedUser(req);
 
-    const user = await userService.update(id, req.body as UpdateUserDTO);
+    const user = await userService.update(
+      id,
+      req.body as UpdateUserDTO,
+      authenticatedUser.id,
+    );
 
     res.status(200).json(user);
   }
 
-  // Excluir usuário por ID
+  // Excluir usuário por ID (exclusão lógica)
   async destroy(req: Request, res: Response): Promise<void> {
     const id = parseId(req.params.id);
+    const authenticatedUser = this.getAuthenticatedUser(req);
 
-    await userService.destroy(id);
+    await userService.destroy(id, authenticatedUser.id);
 
     res.status(204).send();
   }
