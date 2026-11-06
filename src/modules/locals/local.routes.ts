@@ -331,6 +331,12 @@ localRoutes.put(
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
+ *       '409':
+ *         description: Não é possível excluir o local porque existem equipamentos ativos vinculados a ele.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
 localRoutes.delete(
   "/:id",

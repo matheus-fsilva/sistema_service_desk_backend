@@ -11,6 +11,7 @@ import type { LocalResponseDTO } from "./dto/local-response.dto";
 import type { PaginatedResponseDTO } from "../../common/dto/paginated-response.dto";
 
 import Local from "./local.entity";
+import Equipment from "../equipment/equipment.entity";
 
 class LocalService {
   // Dependência do repositório
@@ -111,7 +112,23 @@ class LocalService {
   async destroy(id: number): Promise<void> {
     const local = await this.findEntityById(id);
 
+    const activeEquipment = await database
+      .getRepository(Equipment)
+      .createQueryBuilder("equipment")
+      .innerJoin("equipment.local", "local")
+      .where("local.id = :localId", { localId: local.id })
+      .andWhere("equipment.ativo = :ativo", { ativo: true })
+      .getOne();
+
+    if (activeEquipment) {
+      throw new AppError(
+        "Não é possível excluir este local porque existem equipamentos ativos vinculados a ele.",
+        409,
+      );
+    }
+
     local.ativo = false;
+
     await this.localRepository.save(local);
   }
 
