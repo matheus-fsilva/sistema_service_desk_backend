@@ -25,7 +25,10 @@ class LocalService {
     const { page, limit, order, nome } = searchParams;
 
     const [locals, total] = await this.localRepository.findAndCount({
-      where: nome ? { nome: Like(`%${nome}%`) } : {},
+      where: {
+        ...(nome ? { nome: Like(`%${nome}%`) } : {}),
+        ativo: true,
+      },
       order: {
         id: order,
       },
@@ -53,7 +56,10 @@ class LocalService {
 
   // Buscar local por ID (sem padrão de resposta)
   private async findEntityById(id: number): Promise<Local> {
-    const local = await this.localRepository.findOneBy({ id });
+    const local = await this.localRepository.findOneBy({
+      id,
+      ativo: true,
+    });
 
     if (!local) {
       throw new AppError("Local não encontrado.", 404);

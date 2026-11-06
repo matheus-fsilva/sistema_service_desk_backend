@@ -23,7 +23,7 @@ localRoutes.use(authMiddleware);
  *     tags:
  *       - Locals
  *     summary: Listar locais
- *     description: Lista os locais com busca por nome, paginação e ordenação por identificador.
+ *     description: Lista os locais ativos com busca por nome, paginação e ordenação por identificador.
  *     operationId: indexLocals
  *     parameters:
  *       - in: query
@@ -56,14 +56,34 @@ localRoutes.use(authMiddleware);
  *         required: false
  *         schema:
  *           type: string
- *           enum: [ASC, DESC]
+ *           enum: [ASC, DESC, asc, desc]
  *           default: ASC
- *         description: Ordenação dos locais pelo identificador, em ordem crescente ou decrescente.
+ *         description: Ordenação dos locais pelo identificador.
  *     responses:
  *       '200':
  *         description: Locais listados com sucesso.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/LocalListResponse'
  *       '400':
  *         description: Parâmetros de consulta inválidos.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       '401':
+ *         description: Usuário não autenticado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       '403':
+ *         description: Usuário sem permissão para consultar locais.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
 localRoutes.get(
   "/",
@@ -99,33 +119,31 @@ localRoutes.get(
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/LocalResponse'
- *             example:
- *               id: 1
- *               nome: Laboratório de Informática 01
- *               descricao: Laboratório utilizado para aulas práticas.
- *               ativo: true
- *               created_at: '2026-10-27T14:00:00.000Z'
- *               updated_at: '2026-10-27T14:00:00.000Z'
  *       '400':
  *         description: Identificador inválido.
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
- *             example:
- *               status: error
- *               message: Identificador inválido.
+ *       '401':
+ *         description: Usuário não autenticado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       '403':
+ *         description: Usuário sem permissão para consultar locais.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       '404':
  *         description: Local não encontrado.
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
- *             example:
- *               status: error
- *               message: Local não encontrado.
  */
-
 localRoutes.get(
   "/:id",
   ensureUserRole("N1", "N2", "Admin"),
@@ -160,31 +178,30 @@ localRoutes.get(
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/LocalResponse'
- *             example:
- *               id: 1
- *               nome: Laboratório de Informática 01
- *               descricao: Laboratório utilizado para aulas práticas.
- *               ativo: true
- *               created_at: '2026-10-27T14:00:00.000Z'
- *               updated_at: '2026-10-27T14:00:00.000Z'
  *       '400':
  *         description: Dados da requisição inválidos.
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
- *             example:
- *               status: error
- *               message: O nome deve possuir no máximo 100 caracteres.
+ *       '401':
+ *         description: Usuário não autenticado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       '403':
+ *         description: Usuário sem permissão para cadastrar locais.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       '409':
  *         description: Já existe um local com esse nome.
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
- *             example:
- *               status: error
- *               message: Este local já está cadastrado.
  */
 localRoutes.post(
   "/",
@@ -235,6 +252,18 @@ localRoutes.post(
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
+ *       '401':
+ *         description: Usuário não autenticado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       '403':
+ *         description: Usuário sem permissão para atualizar locais.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       '404':
  *         description: Local não encontrado.
  *         content:
@@ -264,7 +293,7 @@ localRoutes.put(
  *     tags:
  *       - Locals
  *     summary: Excluir local
- *     description: Exclui um local pelo seu identificador.
+ *     description: Realiza a exclusão lógica de um local, alterando seu campo ativo para false.
  *     operationId: deleteLocal
  *     parameters:
  *       - in: path
@@ -277,9 +306,21 @@ localRoutes.put(
  *         example: 1
  *     responses:
  *       '204':
- *         description: Local excluído com sucesso.
+ *         description: Local excluído logicamente com sucesso.
  *       '400':
  *         description: Identificador inválido.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       '401':
+ *         description: Usuário não autenticado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       '403':
+ *         description: Usuário sem permissão para excluir locais.
  *         content:
  *           application/json:
  *             schema:
