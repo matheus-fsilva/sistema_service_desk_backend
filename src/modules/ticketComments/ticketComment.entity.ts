@@ -7,7 +7,7 @@ import {
   CreateDateColumn,
 } from "typeorm";
 
-import Ticket from "../ticket/ticket.entity";
+import Ticket from "../tickets/ticket.entity";
 import User from "../users/users.entity";
 
 @Entity({ name: "ticket_comment" })
