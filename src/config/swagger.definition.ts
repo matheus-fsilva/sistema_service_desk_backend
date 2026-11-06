@@ -40,6 +40,7 @@ export const swaggerDefinition = {
     schemas: {
       ErrorResponse: {
         type: "object",
+        required: ["status", "statusCode", "message"],
         properties: {
           status: {
             type: "string",
@@ -57,6 +58,7 @@ export const swaggerDefinition = {
             type: "array",
             items: {
               type: "object",
+              required: ["field", "message"],
               properties: {
                 field: {
                   type: "string",
@@ -220,6 +222,14 @@ export const swaggerDefinition = {
 
       LocalResponse: {
         type: "object",
+        required: [
+          "id",
+          "nome",
+          "descricao",
+          "ativo",
+          "created_at",
+          "updated_at",
+        ],
         properties: {
           id: {
             type: "integer",
@@ -227,11 +237,13 @@ export const swaggerDefinition = {
           },
           nome: {
             type: "string",
+            maxLength: 100,
             example: "Laboratório de Informática 1",
           },
           descricao: {
             type: "string",
             nullable: true,
+            maxLength: 255,
             example: "Laboratório destinado às aulas práticas.",
           },
           ativo: {
@@ -241,10 +253,12 @@ export const swaggerDefinition = {
           created_at: {
             type: "string",
             format: "date-time",
+            example: "2026-11-06T10:00:00.000Z",
           },
           updated_at: {
             type: "string",
             format: "date-time",
+            example: "2026-11-06T10:00:00.000Z",
           },
         },
       },
@@ -527,6 +541,148 @@ export const swaggerDefinition = {
           },
           pagination: {
             $ref: "#/components/schemas/TicketPagination",
+          },
+        },
+      },
+
+      // EQUIPMENT
+      EquipmentResponse: {
+        type: "object",
+        required: [
+          "id",
+          "nome",
+          "descricao",
+          "ativo",
+          "id_local",
+          "created_at",
+          "updated_at",
+        ],
+        properties: {
+          id: {
+            type: "integer",
+            example: 1,
+          },
+          nome: {
+            type: "string",
+            maxLength: 100,
+            example: "Computador Dell OptiPlex",
+          },
+          descricao: {
+            type: "string",
+            nullable: true,
+            maxLength: 255,
+            example: "Computador utilizado no laboratório.",
+          },
+          ativo: {
+            type: "boolean",
+            example: true,
+          },
+          id_local: {
+            type: "integer",
+            example: 1,
+          },
+          created_at: {
+            type: "string",
+            format: "date-time",
+            example: "2026-11-06T10:00:00.000Z",
+          },
+          updated_at: {
+            type: "string",
+            format: "date-time",
+            example: "2026-11-06T10:00:00.000Z",
+          },
+        },
+      },
+
+      CreateEquipment: {
+        type: "object",
+        required: ["nome", "id_local"],
+        properties: {
+          nome: {
+            type: "string",
+            maxLength: 100,
+            example: "Computador Dell OptiPlex",
+          },
+          descricao: {
+            type: "string",
+            nullable: true,
+            maxLength: 255,
+            example: "Computador utilizado no laboratório.",
+          },
+          id_local: {
+            type: "integer",
+            minimum: 1,
+            example: 1,
+          },
+        },
+      },
+
+      UpdateEquipment: {
+        type: "object",
+        minProperties: 1,
+        properties: {
+          nome: {
+            type: "string",
+            maxLength: 100,
+            example: "Computador Dell OptiPlex atualizado",
+          },
+          descricao: {
+            type: "string",
+            nullable: true,
+            maxLength: 255,
+            example: "Descrição atualizada.",
+          },
+          id_local: {
+            type: "integer",
+            minimum: 1,
+            example: 2,
+          },
+        },
+      },
+
+      EquipmentPagination: {
+        type: "object",
+        required: ["page", "limit", "total", "totalPages"],
+        properties: {
+          page: {
+            type: "integer",
+            example: 1,
+          },
+          limit: {
+            type: "integer",
+            example: 10,
+          },
+          total: {
+            type: "integer",
+            example: 25,
+          },
+          totalPages: {
+            type: "integer",
+            example: 3,
+          },
+        },
+      },
+
+      EquipmentListResponse: {
+        type: "object",
+        required: ["status", "message", "data", "pagination"],
+        properties: {
+          status: {
+            type: "string",
+            example: "success",
+          },
+          message: {
+            type: "string",
+            example: "Equipamentos listados com sucesso.",
+          },
+          data: {
+            type: "array",
+            items: {
+              $ref: "#/components/schemas/EquipmentResponse",
+            },
+          },
+          pagination: {
+            $ref: "#/components/schemas/EquipmentPagination",
           },
         },
       },

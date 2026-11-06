@@ -62,8 +62,28 @@ equipmentRoutes.use(authMiddleware);
  *     responses:
  *       '200':
  *         description: Equipamentos listados com sucesso.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/EquipmentListResponse'
  *       '400':
  *         description: Parâmetros de consulta inválidos.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       '401':
+ *         description: Usuário não autenticado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       '403':
+ *         description: Usuário sem permissão para listar equipamentos.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
 equipmentRoutes.get(
   "/",
@@ -95,10 +115,34 @@ equipmentRoutes.get(
  *     responses:
  *       '200':
  *         description: Equipamento encontrado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/EquipmentResponse'
  *       '400':
  *         description: Identificador inválido.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       '401':
+ *         description: Usuário não autenticado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       '403':
+ *         description: Usuário sem permissão para consultar equipamentos.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       '404':
  *         description: Equipamento não encontrado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
 equipmentRoutes.get(
   "/:id",
@@ -131,12 +175,40 @@ equipmentRoutes.get(
  *     responses:
  *       '201':
  *         description: Equipamento cadastrado com sucesso.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/EquipmentResponse'
  *       '400':
  *         description: Dados da requisição inválidos.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       '401':
+ *         description: Usuário não autenticado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       '403':
+ *         description: Somente administradores podem cadastrar equipamentos.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       '404':
  *         description: Local não encontrado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       '409':
  *         description: Já existe um equipamento com esse nome.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
 equipmentRoutes.post(
   "/",
@@ -178,12 +250,40 @@ equipmentRoutes.post(
  *     responses:
  *       '200':
  *         description: Equipamento atualizado com sucesso.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/EquipmentResponse'
  *       '400':
  *         description: Dados inválidos ou identificador inválido.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       '401':
+ *         description: Usuário não autenticado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       '403':
+ *         description: Somente administradores podem atualizar equipamentos.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       '404':
  *         description: Equipamento ou local não encontrado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       '409':
  *         description: Já existe um equipamento com esse nome.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
 equipmentRoutes.put(
   "/:id",
@@ -200,8 +300,8 @@ equipmentRoutes.put(
  *   delete:
  *     tags:
  *       - Equipment
- *     summary: Excluir equipamento
- *     description: Exclui um equipamento pelo seu identificador.
+ *     summary: Desativar equipamento
+ *     description: Realiza a exclusão lógica do equipamento, alterando seu campo ativo para false.
  *     operationId: deleteEquipment
  *     parameters:
  *       - in: path
@@ -214,14 +314,35 @@ equipmentRoutes.put(
  *         example: 1
  *     responses:
  *       '204':
- *         description: Equipamento excluído com sucesso.
+ *         description: Equipamento desativado com sucesso.
  *       '400':
  *         description: Identificador inválido.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       '401':
+ *         description: Usuário não autenticado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *       '403':
+ *         description: Somente administradores podem desativar equipamentos.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  *       '404':
  *         description: Equipamento não encontrado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
  */
 equipmentRoutes.delete(
   "/:id",
+  ensureUserRole("Admin"),
   equipmentController.destroy.bind(equipmentController),
 );
 // #endregion
