@@ -288,8 +288,17 @@ class TicketService {
       ticket.nivel_atendimento = nivel_atendimento;
     }
 
-    // Validar novamente o técnico após eventual mudança de nível
-    if (ticket.tecnico_atribuido) {
+    // Atualizar ou validar o técnico atribuído
+    if (id_tecnico_atribuido !== undefined) {
+      ticket.tecnico_atribuido =
+        id_tecnico_atribuido === null
+          ? null
+          : await this.validateTechnician(
+              id_tecnico_atribuido,
+              ticket.nivel_atendimento,
+            );
+    } else if (ticket.tecnico_atribuido) {
+      // Revalidar o técnico atual caso o nível tenha sido alterado
       ticket.tecnico_atribuido = await this.validateTechnician(
         ticket.tecnico_atribuido.id,
         ticket.nivel_atendimento,
@@ -317,16 +326,6 @@ class TicketService {
         "Chamados de Hardware precisam estar associados a um local.",
         400,
       );
-    }
-
-    if (id_tecnico_atribuido !== undefined) {
-      ticket.tecnico_atribuido =
-        id_tecnico_atribuido === null
-          ? null
-          : await this.validateTechnician(
-              id_tecnico_atribuido,
-              ticket.nivel_atendimento,
-            );
     }
 
     if (status !== undefined) {

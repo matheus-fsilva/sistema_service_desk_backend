@@ -180,7 +180,7 @@ ticketRoutes.get(
  *       Retorna os dados de um chamado específico, respeitando as regras
  *       de acesso do perfil do usuário autenticado.
  *
- *       Usuarios consultam somente os próprios chamados.
+ *       Usuários consultam somente os próprios chamados.
  *       N1 consulta chamados N1 e os próprios chamados N2.
  *       N2 consulta chamados N1, N2 e os próprios chamados.
  *       Admin possui acesso irrestrito.

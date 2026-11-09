@@ -19,7 +19,32 @@ export const swaggerDefinition = {
     },
   ],
 
-  tags: [],
+  tags: [
+    {
+      name: "Auth",
+      description: "Autenticação e gerenciamento de acesso.",
+    },
+    {
+      name: "Users",
+      description: "Gerenciamento de usuários.",
+    },
+    {
+      name: "Locals",
+      description: "Gerenciamento de locais.",
+    },
+    {
+      name: "Equipment",
+      description: "Gerenciamento de equipamentos.",
+    },
+    {
+      name: "Tickets",
+      description: "Gerenciamento de chamados de suporte técnico.",
+    },
+    {
+      name: "Ticket Comments",
+      description: "Gerenciamento dos comentários dos chamados.",
+    },
+  ],
 
   security: [
     {
@@ -118,6 +143,15 @@ export const swaggerDefinition = {
 
       UserResponse: {
         type: "object",
+        required: [
+          "id",
+          "nome",
+          "email",
+          "tipo",
+          "ativo",
+          "created_at",
+          "updated_at",
+        ],
         properties: {
           id: {
             type: "integer",
@@ -263,10 +297,60 @@ export const swaggerDefinition = {
         },
       },
 
+      CreateLocal: {
+        type: "object",
+        required: ["nome"],
+        properties: {
+          nome: {
+            type: "string",
+            maxLength: 100,
+            example: "Laboratório de Informática 1",
+          },
+          descricao: {
+            type: "string",
+            nullable: true,
+            maxLength: 255,
+            example: "Laboratório destinado às aulas práticas.",
+          },
+        },
+      },
+
+      UpdateLocal: {
+        type: "object",
+        minProperties: 1,
+        properties: {
+          nome: {
+            type: "string",
+            maxLength: 100,
+            example: "Laboratório de Informática 2",
+          },
+          descricao: {
+            type: "string",
+            nullable: true,
+            maxLength: 255,
+            example: "Descrição atualizada.",
+          },
+        },
+      },
+
       // TICKETS
 
       TicketResponse: {
         type: "object",
+        required: [
+          "id",
+          "id_solicitante",
+          "titulo",
+          "descricao",
+          "tipo",
+          "status",
+          "prioridade",
+          "nivel_atendimento",
+          "data_abertura",
+          "data_fechamento",
+          "created_at",
+          "updated_at",
+        ],
         properties: {
           id: {
             type: "integer",
@@ -348,6 +432,10 @@ export const swaggerDefinition = {
 
       CreateTicket: {
         type: "object",
+        description:
+          "Para chamados do tipo Hardware, o local é obrigatório. " +
+          "Para Software, o local é opcional. " +
+          "Quando informado um equipamento, ele deve pertencer ao local indicado.",
         required: ["titulo", "descricao", "tipo", "prioridade"],
         properties: {
           titulo: {
@@ -461,6 +549,13 @@ export const swaggerDefinition = {
 
       TicketCommentResponse: {
         type: "object",
+        required: [
+          "id",
+          "id_chamado",
+          "id_usuario",
+          "comentario",
+          "created_at",
+        ],
         properties: {
           id: {
             type: "integer",
@@ -502,6 +597,7 @@ export const swaggerDefinition = {
 
       TicketPagination: {
         type: "object",
+        required: ["page", "limit", "total", "totalPages"],
         properties: {
           page: {
             type: "integer",
@@ -546,6 +642,7 @@ export const swaggerDefinition = {
       },
 
       // EQUIPMENT
+
       EquipmentResponse: {
         type: "object",
         required: [
