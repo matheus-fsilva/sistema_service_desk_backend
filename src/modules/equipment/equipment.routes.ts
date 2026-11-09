@@ -23,7 +23,7 @@ equipmentRoutes.use(authMiddleware);
  *     tags:
  *       - Equipment
  *     summary: Listar equipamentos
- *     description: Lista os equipamentos com busca por nome, paginação e ordenação por identificador.
+ *     description: Lista os equipamentos ativos com busca por nome, paginação e ordenação por identificador.
  *     operationId: indexEquipments
  *     parameters:
  *       - in: query

@@ -30,7 +30,10 @@ class EquipmentService {
     const { page, limit, order, nome } = searchParams;
 
     const [equipments, total] = await this.equipmentRepository.findAndCount({
-      where: nome ? { nome: Like(`%${nome}%`) } : {},
+      where: {
+        ...(nome ? { nome: Like(`%${nome}%`) } : {}),
+        ativo: true,
+      },
       relations: {
         local: true,
       },
@@ -62,7 +65,10 @@ class EquipmentService {
   // Buscar equipamento por ID (sem padrão de resposta)
   private async findEntityById(id: number): Promise<Equipment> {
     const equipment = await this.equipmentRepository.findOne({
-      where: { id },
+      where: {
+        id,
+        ativo: true,
+      },
       relations: {
         local: true,
       },
