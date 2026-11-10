@@ -118,6 +118,19 @@ select:focus, input:focus, textarea:focus { border-color: #53a98a; box-shadow: 0
 .public-summary span, .public-summary label { color: #788591; font-size: 10px; }
 .public-summary strong { color: #253342; font-family: Manrope, sans-serif; font-size: 23px; }
 .public-summary select { width: 100%; padding: 6px 8px; font-size: 10px; }
+.requester-search { max-width: 520px; }
+.asset-summary { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 13px; margin-bottom: 18px; }
+.report-summary { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 13px; margin-bottom: 18px; }
+.report-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 13px; margin-bottom: 16px; }
+.report-card { min-height: 220px; padding: 19px 20px; }
+.count-bars { display: grid; gap: 15px; padding: 6px 0 2px; }
+.count-bar-row > div:first-child { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 7px; color: #687785; font-size: 10px; }
+.count-bar-row strong { color: #293947; font-size: 10px; }
+.count-bar-track { height: 7px; overflow: hidden; border-radius: 99px; background: #eef1f3; }
+.count-bar-fill { display: block; height: 100%; min-width: 0; border-radius: inherit; }
+.count-bar-fill.green { background: #54a487; }
+.count-bar-fill.amber { background: #d1a04a; }
+.report-labs { margin-top: 0; }
 .page-footer { display: flex; justify-content: space-between; gap: 12px; margin-top: 25px; padding: 14px 0 6px; color: #9aa4ad; font-size: 9px; }
 .page-footer span { text-align: right; }
 
@@ -127,6 +140,7 @@ select:focus, input:focus, textarea:focus { border-color: #53a98a; box-shadow: 0
   .content { padding-right: 25px; padding-left: 25px; }
   .topbar { padding: 0 25px; }
   .stats-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .report-summary { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 @media (max-width: 700px) {
   .sidebar { position: static; width: auto; padding: 12px 14px; }
@@ -164,6 +178,7 @@ select:focus, input:focus, textarea:focus { border-color: #53a98a; box-shadow: 0
   .form-actions .button { flex: 1; }
   .public-summary { grid-template-columns: 1fr 1fr; }
   .public-summary > label { grid-column: 1 / -1; }
+  .asset-summary, .report-summary, .report-grid { grid-template-columns: 1fr; }
   .page-footer { flex-direction: column; }
   .page-footer span { text-align: left; }
 }

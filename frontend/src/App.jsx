@@ -82,6 +82,20 @@ function TicketTable({ tickets, compact = false, onOpen }) {
   );
 }
 
+function CountBars({ items, tone }) {
+  const max = Math.max(1, ...items.map((item) => item.value));
+  return (
+    <div className="count-bars">
+      {items.map((item) => (
+        <div className="count-bar-row" key={item.label}>
+          <div><span>{item.label}</span><strong>{item.value}</strong></div>
+          <div className="count-bar-track"><span className={`count-bar-fill ${tone}`} style={{ width: `${(item.value / max) * 100}%` }} /></div>
+        </div>
+      ))}
+    </div>
+  );
+}
+
 function TicketForm({ onCancel, onCreate }) {
   const [form, setForm] = useState({ requester: "", lab: "", machine: "", priority: "Média", problem: "" });
   const [error, setError] = useState("");
@@ -158,6 +172,7 @@ export default function App() {
   const [labFilter, setLabFilter] = useState("Todos os laboratórios");
   const [statusFilter, setStatusFilter] = useState("Todos os status");
   const [search, setSearch] = useState("");
+  const [requesterFilter, setRequesterFilter] = useState("");
   const [notice, setNotice] = useState("");
 
   useEffect(() => localStorage.setItem(STORAGE_KEY, JSON.stringify(tickets)), [tickets]);
@@ -168,7 +183,30 @@ export default function App() {
   const openCount = tickets.filter((ticket) => ticket.status === "Aberto").length;
   const progressCount = tickets.filter((ticket) => ticket.status === "Em andamento").length;
   const activeCount = openCount + progressCount;
-  const equipmentCount = new Set(tickets.map((ticket) => `${ticket.lab}|${ticket.machine}`)).size;
+  const resolvedCount = tickets.filter((ticket) => ticket.status === "Resolvido").length;
+  const closedCount = tickets.filter((ticket) => ticket.status === "Fechado").length;
+  const equipment = useMemo(() => {
+    const grouped = new Map();
+    for (const ticket of tickets) {
+      const key = `${ticket.lab}\u0000${ticket.machine}`;
+      const item = grouped.get(key) || { lab: ticket.lab, machine: ticket.machine, total: 0, active: 0, lastDate: ticket.createdAt };
+      item.total += 1;
+      if (ticket.status === "Aberto" || ticket.status === "Em andamento") item.active += 1;
+      if (new Date(ticket.createdAt) > new Date(item.lastDate)) item.lastDate = ticket.createdAt;
+      grouped.set(key, item);
+    }
+    return [...grouped.values()].sort((a, b) => a.lab.localeCompare(b.lab) || a.machine.localeCompare(b.machine));
+  }, [tickets]);
+  const equipmentCount = equipment.length;
+  const myTickets = requesterFilter.trim()
+    ? orderedTickets.filter((ticket) => ticket.requester.toLocaleLowerCase("pt-BR").includes(requesterFilter.trim().toLocaleLowerCase("pt-BR")))
+    : [];
+  const statusReport = STATUSES.map((status) => ({ label: status, value: tickets.filter((ticket) => ticket.status === status).length }));
+  const priorityReport = PRIORITIES.map((priority) => ({ label: priority, value: tickets.filter((ticket) => ticket.priority === priority).length }));
+  const labReport = labs.map((lab) => {
+    const labTickets = tickets.filter((ticket) => ticket.lab === lab);
+    return { lab, total: labTickets.length, active: labTickets.filter((ticket) => ticket.status === "Aberto" || ticket.status === "Em andamento").length, done: labTickets.filter((ticket) => ticket.status === "Resolvido" || ticket.status === "Fechado").length };
+  });
 
   const filteredTickets = orderedTickets.filter((ticket) => {
     const matchesLab = labFilter === "Todos os laboratórios" || ticket.lab === labFilter;
@@ -205,9 +243,13 @@ export default function App() {
   const navItems = [
     { id: "dashboard", label: "Visão geral", icon: "⌂" },
     { id: "tickets", label: "Chamados", icon: "▤" },
+    { id: "my-tickets", label: "Meus chamados", icon: "◷" },
     { id: "new", label: "Novo chamado", icon: "+" },
+    { id: "assets", label: "Ativos", icon: "▣" },
+    { id: "reports", label: "Relatórios", icon: "▥" },
     { id: "public", label: "Painel público", icon: "◉" },
   ];
+  const pageTitle = page === "attendance" ? "Atendimento" : navItems.find((item) => item.id === page)?.label || "Visão geral";
 
   return (
     <div className="app-shell">
@@ -221,7 +263,7 @@ export default function App() {
       </aside>
 
       <div className="main-column">
-        <header className="topbar"><div><span className="topbar-kicker">SERVICE DESK</span><strong>{page === "new" ? "Novo chamado" : page === "attendance" ? "Atendimento" : page === "public" ? "Painel público" : page === "tickets" ? "Central de chamados" : "Visão geral"}</strong></div><a className="api-link" href="http://localhost:3000/api/docs" target="_blank" rel="noreferrer"><span className="api-dot" />Documentação da API <span aria-hidden="true">↗</span></a></header>
+        <header className="topbar"><div><span className="topbar-kicker">SERVICE DESK</span><strong>{pageTitle}</strong></div><a className="api-link" href="http://localhost:3000/api/docs" target="_blank" rel="noreferrer"><span className="api-dot" />Documentação da API <span aria-hidden="true">↗</span></a></header>
 
         <main className="content">
           <div className="connection-notice"><span className="notice-icon" aria-hidden="true">i</span><p><strong>Modo local.</strong> O backend ainda não publica rotas de chamados; os dados desta interface ficam salvos somente neste navegador.</p></div>
@@ -243,6 +285,11 @@ export default function App() {
             <section className="panel table-panel"><div className="filter-bar"><label className="search-box"><span aria-hidden="true">⌕</span><input value={search} onChange={(event) => setSearch(event.target.value)} placeholder="Buscar chamado, laboratório ou problema" /></label><select aria-label="Filtrar por laboratório" value={labFilter} onChange={(event) => setLabFilter(event.target.value)}><option>Todos os laboratórios</option>{labs.map((lab) => <option key={lab}>{lab}</option>)}</select><select aria-label="Filtrar por status" value={statusFilter} onChange={(event) => setStatusFilter(event.target.value)}><option>Todos os status</option>{STATUSES.map((status) => <option key={status}>{status}</option>)}</select></div><TicketTable tickets={filteredTickets} onOpen={openTicket} /></section>
           </>}
 
+          {page === "my-tickets" && <>
+            <section className="page-heading"><div><p className="eyebrow">ACOMPANHAMENTO</p><h1>Meus chamados</h1><p>Busque pelo nome usado ao abrir a solicitação.</p></div><button className="button button-primary" onClick={() => setPage("new")}>＋ Novo chamado</button></section>
+            <section className="panel table-panel"><div className="filter-bar"><label className="search-box requester-search"><span aria-hidden="true">⌕</span><input value={requesterFilter} onChange={(event) => setRequesterFilter(event.target.value)} placeholder="Digite seu nome de solicitante" /></label></div>{requesterFilter.trim() ? <TicketTable tickets={myTickets} /> : <EmptyState title="Informe seu nome" detail="A lista usa o nome preenchido no chamado. Não há login de usuário configurado no backend." />}</section>
+          </>}
+
           {page === "new" && <><section className="page-heading"><div><p className="eyebrow">SOLICITAR SUPORTE</p><h1>Conte o que aconteceu</h1><p>As informações ajudam a equipe a localizar e resolver o problema.</p></div></section><TicketForm onCancel={() => setPage("dashboard")} onCreate={createTicket} /></>}
 
           {page === "attendance" && (selectedTicket ? <><section className="page-heading"><div><p className="eyebrow">SUPORTE TÉCNICO</p><h1>Atendimento do chamado</h1><p>Registre o diagnóstico e a solução aplicada.</p></div></section><AttendanceForm ticket={selectedTicket} onCancel={() => setPage("tickets")} onSave={saveTicket} /></> : <EmptyState title="Chamado não encontrado" detail="O chamado selecionado não está disponível." action="Voltar aos chamados" onAction={() => setPage("tickets")} />)}
@@ -251,6 +298,19 @@ export default function App() {
             <section className="page-heading public-heading"><div><p className="eyebrow">ACESSO PÚBLICO</p><h1>Painel de chamados</h1><p>Acompanhe as solicitações registradas nos laboratórios.</p></div><button className="button button-primary" onClick={() => setPage("new")}>＋ Abrir novo chamado</button></section>
             <section className="public-summary"><div><span>Em aberto / andamento</span><strong>{activeCount}</strong></div><div><span>Total no histórico</span><strong>{tickets.length}</strong></div><label>Laboratório<select value={labFilter} onChange={(event) => setLabFilter(event.target.value)}><option>Todos os laboratórios</option>{labs.map((lab) => <option key={lab}>{lab}</option>)}</select></label></section>
             <section className="panel table-panel"><div className="panel-heading"><div><p className="eyebrow">ATUALIZAÇÕES</p><h2>Chamados registrados</h2></div></div><TicketTable compact tickets={orderedTickets.filter((ticket) => labFilter === "Todos os laboratórios" || ticket.lab === labFilter)} /></section>
+          </>}
+
+          {page === "assets" && <>
+            <section className="page-heading"><div><p className="eyebrow">INVENTÁRIO</p><h1>Ativos e equipamentos</h1><p>Equipamentos agrupados a partir do histórico de chamados.</p></div><button className="button button-primary" onClick={() => setPage("new")}>＋ Registrar problema</button></section>
+            <section className="asset-summary"><article className="stat-card"><span className="stat-icon violet">▣</span><span className="stat-label">Equipamentos com histórico</span><strong>{equipmentCount}</strong><small>identificados por laboratório e máquina</small></article><article className="stat-card"><span className="stat-icon amber">◷</span><span className="stat-label">Com chamado ativo</span><strong>{equipment.filter((item) => item.active > 0).length}</strong><small>aberto ou em atendimento</small></article></section>
+            <section className="panel table-panel"><div className="panel-heading"><div><p className="eyebrow">INVENTÁRIO LOCAL</p><h2>Equipamentos</h2></div></div>{equipment.length ? <div className="table-wrap"><table><thead><tr><th>Equipamento</th><th>Laboratório</th><th>Chamados</th><th>Ativos</th><th>Último registro</th><th /></tr></thead><tbody>{equipment.map((item) => <tr key={`${item.lab}|${item.machine}`}><td><strong>{item.machine}</strong></td><td>{item.lab}</td><td>{item.total}</td><td>{item.active}</td><td>{formatDate(item.lastDate)}</td><td><button className="text-button" onClick={() => { setLabFilter(item.lab); setSearch(item.machine); setStatusFilter("Todos os status"); setPage("tickets"); }}>Ver histórico →</button></td></tr>)}</tbody></table></div> : <EmptyState title="Nenhum equipamento registrado" detail="Os ativos aparecem aqui depois que um chamado informa laboratório e equipamento." action="Abrir chamado" onAction={() => setPage("new")} />}</section>
+          </>}
+
+          {page === "reports" && <>
+            <section className="page-heading"><div><p className="eyebrow">ANÁLISE</p><h1>Relatórios</h1><p>Resumo calculado com os chamados salvos neste navegador.</p></div></section>
+            <section className="report-summary"><article className="stat-card"><span className="stat-icon blue">▤</span><span className="stat-label">Total de chamados</span><strong>{tickets.length}</strong><small>no histórico local</small></article><article className="stat-card"><span className="stat-icon amber">◷</span><span className="stat-label">Em aberto / andamento</span><strong>{activeCount}</strong><small>precisam de acompanhamento</small></article><article className="stat-card"><span className="stat-icon green">✓</span><span className="stat-label">Resolvidos / fechados</span><strong>{resolvedCount + closedCount}</strong><small>finalizados</small></article></section>
+            <section className="report-grid"><article className="panel report-card"><div className="panel-heading"><div><p className="eyebrow">SITUAÇÃO</p><h2>Chamados por status</h2></div></div><CountBars items={statusReport} tone="green" /></article><article className="panel report-card"><div className="panel-heading"><div><p className="eyebrow">URGÊNCIA</p><h2>Chamados por prioridade</h2></div></div><CountBars items={priorityReport} tone="amber" /></article></section>
+            <section className="panel table-panel report-labs"><div className="panel-heading"><div><p className="eyebrow">LOCALIZAÇÃO</p><h2>Resumo por laboratório</h2></div></div>{labReport.length ? <div className="table-wrap"><table><thead><tr><th>Laboratório</th><th>Total</th><th>Ativos</th><th>Finalizados</th></tr></thead><tbody>{labReport.map((item) => <tr key={item.lab}><td><strong>{item.lab}</strong></td><td>{item.total}</td><td>{item.active}</td><td>{item.done}</td></tr>)}</tbody></table></div> : <EmptyState title="Sem dados para o relatório" detail="Abra chamados para gerar os primeiros indicadores." action="Novo chamado" onAction={() => setPage("new")} />}</section>
           </>}
           <footer className="page-footer">Service Desk · FATEC TI <span>Interface React · dados locais neste navegador</span></footer>
         </main>
