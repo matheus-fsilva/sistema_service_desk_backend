@@ -1,65 +1,13 @@
 <!doctype html>
 <html lang="pt-BR">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <meta name="theme-color" content="#f5f7fb">
-  <title>Service Desk</title>
-  <style>
-    :root { color-scheme: light; font-family: Inter, ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif; color: #182230; background: #f5f7fb; }
-    * { box-sizing: border-box; }
-    body { margin: 0; min-height: 100vh; }
-    header { display: flex; align-items: center; justify-content: space-between; gap: 1rem; padding: 1.1rem clamp(1rem, 5vw, 4rem); background: #fff; border-bottom: 1px solid #e5eaf1; }
-    .brand { display: flex; align-items: center; gap: .75rem; font-size: 1.05rem; font-weight: 700; }
-    .brand-mark { display: grid; width: 2.25rem; height: 2.25rem; place-items: center; border-radius: .7rem; color: #fff; background: #3157d5; }
-    .status { display: inline-flex; align-items: center; gap: .45rem; border: 1px solid #f1d8a7; border-radius: 999px; padding: .4rem .75rem; color: #805b17; background: #fff9eb; font-size: .82rem; }
-    .status::before { width: .48rem; height: .48rem; border-radius: 50%; background: #d69521; content: ""; }
-    main { width: min(100% - 2rem, 1080px); margin: 3.25rem auto; }
-    .eyebrow { margin: 0 0 .65rem; color: #3157d5; font-size: .78rem; font-weight: 700; letter-spacing: .12em; text-transform: uppercase; }
-    h1 { margin: 0; font-size: clamp(2rem, 5vw, 3.1rem); letter-spacing: -.045em; }
-    .intro { max-width: 650px; margin: .9rem 0 2rem; color: #5b6677; font-size: 1.05rem; line-height: 1.65; }
-    .panel { display: grid; grid-template-columns: auto 1fr; gap: 1.1rem; padding: clamp(1.25rem, 4vw, 2rem); border: 1px solid #e3e8f0; border-radius: 1rem; background: #fff; box-shadow: 0 8px 28px #2538580a; }
-    .icon { display: grid; width: 2.8rem; height: 2.8rem; place-items: center; border-radius: .8rem; color: #805b17; background: #fff5dc; font-size: 1.25rem; }
-    h2 { margin: .15rem 0 .55rem; font-size: 1.15rem; }
-    .panel p { margin: 0; color: #5b6677; line-height: 1.6; }
-    .actions { display: flex; flex-wrap: wrap; gap: .75rem; margin-top: 1.25rem; }
-    a.button { display: inline-flex; align-items: center; justify-content: center; min-height: 2.7rem; padding: .65rem 1rem; border: 1px solid #3157d5; border-radius: .6rem; color: #fff; background: #3157d5; font-size: .92rem; font-weight: 650; text-decoration: none; }
-    a.button.secondary { color: #3157d5; background: #fff; }
-    a.button:focus-visible { outline: 3px solid #93a8ff; outline-offset: 3px; }
-    .details { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1rem; margin-top: 1rem; }
-    .detail { padding: 1.1rem 1.2rem; border: 1px solid #e3e8f0; border-radius: .85rem; background: #fff; }
-    .detail strong { display: block; margin-bottom: .4rem; font-size: .9rem; }
-    .detail span { color: #667285; font-size: .9rem; line-height: 1.5; }
-    code { padding: .1rem .35rem; border-radius: .3rem; color: #344054; background: #f1f3f7; font-size: .86em; }
-    footer { margin-top: 2rem; color: #7a8595; font-size: .82rem; }
-    @media (max-width: 600px) { header { align-items: flex-start; flex-direction: column; } .details { grid-template-columns: 1fr; } .panel { grid-template-columns: 1fr; } }
-  </style>
-</head>
-<body>
-  <header>
-    <div class="brand"><span class="brand-mark" aria-hidden="true">S</span> Service Desk</div>
-    <span class="status">Backend sem funcionalidades de atendimento publicadas</span>
-  </header>
-  <main>
-    <p class="eyebrow">Central de suporte</p>
-    <h1>Bem-vindo ao Service Desk</h1>
-    <p class="intro">Este é o ponto de entrada da interface do sistema. A API atual ainda não oferece operações para consultar ou criar chamados, então esta página mostra o estado disponível sem apresentar dados fictícios.</p>
-    <section class="panel" aria-labelledby="api-status">
-      <div class="icon" aria-hidden="true">!</div>
-      <div>
-        <h2 id="api-status">A API ainda não possui rotas de chamados</h2>
-        <p>O arquivo de rotas está vazio e a especificação OpenAPI não lista operações de atendimento. Quando essas rotas forem adicionadas ao backend, a interface poderá ser ligada a elas.</p>
-        <div class="actions">
-          <a class="button" href="http://localhost:3000/api/docs">Abrir documentação da API</a>
-          <a class="button secondary" href="http://localhost:3000/api/openapi.json">Ver especificação OpenAPI</a>
-        </div>
-      </div>
-    </section>
-    <section class="details" aria-label="Informações do projeto">
-      <div class="detail"><strong>Backend</strong><span>Node.js, Express, TypeScript e MySQL</span></div>
-      <div class="detail"><strong>Rotas configuradas</strong><span><code>/api/docs</code> e <code>/api/openapi.json</code> para documentação</span></div>
-    </section>
-    <footer>Interface estática em HTML. Os links da API dependem do backend estar em execução na porta 3000.</footer>
-  </main>
-</body>
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f4f6f8" />
+    <title>Service Desk | FATEC TI</title>
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
 </html>
