@@ -65,10 +65,11 @@ export const swaggerDefinition = {
     schemas: {
       ErrorResponse: {
         type: "object",
-        required: ["status", "statusCode", "message"],
+        required: ["status", "statusCode", "message", "errors"],
         properties: {
           status: {
             type: "string",
+            enum: ["error"],
             example: "error",
           },
           statusCode: {
@@ -87,14 +88,15 @@ export const swaggerDefinition = {
               properties: {
                 field: {
                   type: "string",
-                  example: "senha",
+                  example: "campo",
                 },
                 message: {
                   type: "string",
-                  example: "A senha deve possuir no mínimo 8 caracteres.",
+                  example: "Mensagem de validação.",
                 },
               },
             },
+            example: [],
           },
         },
       },
@@ -620,6 +622,7 @@ export const swaggerDefinition = {
 
       TicketListResponse: {
         type: "object",
+        required: ["status", "message", "data", "pagination"],
         properties: {
           status: {
             type: "string",

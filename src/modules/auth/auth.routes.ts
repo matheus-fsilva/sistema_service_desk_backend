@@ -35,12 +35,24 @@ const authRoutes = Router();
  *           application/json:
  *             schema:
  *               $ref: "#/components/schemas/ErrorResponse"
+ *             example:
+ *               status: error
+ *               statusCode: 400
+ *               message: Os dados enviados são inválidos.
+ *               errors:
+ *                 - field: email
+ *                   message: Informe um endereço de e-mail válido.
  *       401:
  *         description: E-mail ou senha inválidos.
  *         content:
  *           application/json:
  *             schema:
  *               $ref: "#/components/schemas/ErrorResponse"
+ *             example:
+ *               status: error
+ *               statusCode: 401
+ *               message: E-mail ou senha inválidos.
+ *               errors: []
  */
 authRoutes.post("/login", validateSchema(loginSchema), authController.login);
 

@@ -72,18 +72,35 @@ equipmentRoutes.use(authMiddleware);
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 400
+ *               message: Os dados enviados são inválidos.
+ *               errors:
+ *                 - field: page
+ *                   message: A página deve ser um número inteiro positivo.
  *       '401':
  *         description: Usuário não autenticado.
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 401
+ *               message: Usuário não autenticado.
+ *               errors: []
  *       '403':
  *         description: Usuário sem permissão para listar equipamentos.
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 403
+ *               message: Você não possui permissão para realizar esta operação.
+ *               errors: []
  */
 equipmentRoutes.get(
   "/",
@@ -125,24 +142,44 @@ equipmentRoutes.get(
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 400
+ *               message: ID inválido.
+ *               errors: []
  *       '401':
  *         description: Usuário não autenticado.
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 401
+ *               message: Usuário não autenticado.
+ *               errors: []
  *       '403':
  *         description: Usuário sem permissão para consultar equipamentos.
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 403
+ *               message: Você não possui permissão para realizar esta operação.
+ *               errors: []
  *       '404':
  *         description: Equipamento não encontrado.
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 404
+ *               message: Equipamento não encontrado.
+ *               errors: []
  */
 equipmentRoutes.get(
   "/:id",
@@ -185,30 +222,57 @@ equipmentRoutes.get(
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 400
+ *               message: Os dados enviados são inválidos.
+ *               errors:
+ *                 - field: nome
+ *                   message: O nome não pode ultrapassar 100 caracteres.
  *       '401':
  *         description: Usuário não autenticado.
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 401
+ *               message: Usuário não autenticado.
+ *               errors: []
  *       '403':
  *         description: Somente administradores podem cadastrar equipamentos.
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 403
+ *               message: Você não possui permissão para realizar esta operação.
+ *               errors: []
  *       '404':
  *         description: Local não encontrado.
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 404
+ *               message: Local não encontrado.
+ *               errors: []
  *       '409':
  *         description: Já existe um equipamento com esse nome.
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 409
+ *               message: Este equipamento já está cadastrado.
+ *               errors: []
  */
 equipmentRoutes.post(
   "/",
@@ -260,30 +324,57 @@ equipmentRoutes.post(
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 400
+ *               message: Os dados enviados são inválidos.
+ *               errors:
+ *                 - field: nome
+ *                   message: O nome não pode ultrapassar 100 caracteres.
  *       '401':
  *         description: Usuário não autenticado.
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 401
+ *               message: Usuário não autenticado.
+ *               errors: []
  *       '403':
  *         description: Somente administradores podem atualizar equipamentos.
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 403
+ *               message: Você não possui permissão para realizar esta operação.
+ *               errors: []
  *       '404':
  *         description: Equipamento ou local não encontrado.
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 404
+ *               message: Equipamento ou local não encontrado.
+ *               errors: []
  *       '409':
  *         description: Já existe um equipamento com esse nome.
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 409
+ *               message: Este equipamento já está cadastrado.
+ *               errors: []
  */
 equipmentRoutes.put(
   "/:id",
@@ -321,24 +412,44 @@ equipmentRoutes.put(
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 400
+ *               message: ID inválido.
+ *               errors: []
  *       '401':
  *         description: Usuário não autenticado.
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 401
+ *               message: Usuário não autenticado.
+ *               errors: []
  *       '403':
  *         description: Somente administradores podem desativar equipamentos.
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 403
+ *               message: Você não possui permissão para realizar esta operação.
+ *               errors: []
  *       '404':
  *         description: Equipamento não encontrado.
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 404
+ *               message: Equipamento não encontrado.
+ *               errors: []
  */
 equipmentRoutes.delete(
   "/:id",

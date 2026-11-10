@@ -72,18 +72,35 @@ localRoutes.use(authMiddleware);
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 400
+ *               message: Os dados enviados são inválidos.
+ *               errors:
+ *                 - field: page
+ *                   message: A página deve ser um número inteiro positivo.
  *       '401':
  *         description: Usuário não autenticado.
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 401
+ *               message: Usuário não autenticado.
+ *               errors: []
  *       '403':
  *         description: Usuário sem permissão para consultar locais.
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 403
+ *               message: Você não possui permissão para realizar esta operação.
+ *               errors: []
  */
 localRoutes.get(
   "/",
@@ -125,24 +142,44 @@ localRoutes.get(
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 400
+ *               message: ID inválido.
+ *               errors: []
  *       '401':
  *         description: Usuário não autenticado.
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 401
+ *               message: Usuário não autenticado.
+ *               errors: []
  *       '403':
  *         description: Usuário sem permissão para consultar locais.
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 403
+ *               message: Você não possui permissão para realizar esta operação.
+ *               errors: []
  *       '404':
  *         description: Local não encontrado.
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 404
+ *               message: Local não encontrado.
+ *               errors: []
  */
 localRoutes.get(
   "/:id",
@@ -184,24 +221,46 @@ localRoutes.get(
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 400
+ *               message: Os dados enviados são inválidos.
+ *               errors:
+ *                 - field: nome
+ *                   message: O nome não pode ultrapassar 100 caracteres.
  *       '401':
  *         description: Usuário não autenticado.
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 401
+ *               message: Usuário não autenticado.
+ *               errors: []
  *       '403':
  *         description: Usuário sem permissão para cadastrar locais.
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 403
+ *               message: Você não possui permissão para realizar esta operação.
+ *               errors: []
  *       '409':
  *         description: Já existe um local com esse nome.
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 409
+ *               message: Este local já está cadastrado.
+ *               errors: []
  */
 localRoutes.post(
   "/",
@@ -252,30 +311,57 @@ localRoutes.post(
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 400
+ *               message: Os dados enviados são inválidos.
+ *               errors:
+ *                 - field: nome
+ *                   message: O nome não pode ultrapassar 100 caracteres.
  *       '401':
  *         description: Usuário não autenticado.
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 401
+ *               message: Usuário não autenticado.
+ *               errors: []
  *       '403':
  *         description: Usuário sem permissão para atualizar locais.
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 403
+ *               message: Você não possui permissão para realizar esta operação.
+ *               errors: []
  *       '404':
  *         description: Local não encontrado.
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 404
+ *               message: Local não encontrado.
+ *               errors: []
  *       '409':
  *         description: Já existe um local com esse nome.
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 409
+ *               message: Este local já está cadastrado.
+ *               errors: []
  */
 localRoutes.put(
   "/:id",
@@ -313,30 +399,55 @@ localRoutes.put(
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 400
+ *               message: ID inválido.
+ *               errors: []
  *       '401':
  *         description: Usuário não autenticado.
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 401
+ *               message: Usuário não autenticado.
+ *               errors: []
  *       '403':
  *         description: Usuário sem permissão para excluir locais.
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 403
+ *               message: Você não possui permissão para realizar esta operação.
+ *               errors: []
  *       '404':
  *         description: Local não encontrado.
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 404
+ *               message: Local não encontrado.
+ *               errors: []
  *       '409':
  *         description: Não é possível excluir o local porque existem equipamentos ativos vinculados a ele.
  *         content:
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 409
+ *               message: Não é possível excluir o local porque existem equipamentos ativos vinculados a ele.
+ *               errors: []
  */
 localRoutes.delete(
   "/:id",

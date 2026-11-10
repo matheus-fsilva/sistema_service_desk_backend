@@ -157,8 +157,24 @@ ticketRoutes.use(authMiddleware);
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 400
+ *               message: Os dados enviados são inválidos.
+ *               errors:
+ *                 - field: page
+ *                   message: A página deve ser um número inteiro positivo.
  *       '401':
  *         description: Usuário não autenticado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 401
+ *               message: Usuário não autenticado.
+ *               errors: []
  */
 ticketRoutes.get(
   "/",
@@ -203,12 +219,48 @@ ticketRoutes.get(
  *               $ref: '#/components/schemas/TicketResponse'
  *       '400':
  *         description: Identificador inválido.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 400
+ *               message: ID inválido.
+ *               errors: []
  *       '401':
  *         description: Usuário não autenticado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 401
+ *               message: Usuário não autenticado.
+ *               errors: []
  *       '403':
  *         description: Usuário não possui permissão para visualizar este chamado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 403
+ *               message: Você não possui permissão para realizar esta operação.
+ *               errors: []
  *       '404':
  *         description: Chamado não encontrado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 404
+ *               message: Chamado não encontrado.
+ *               errors: []
  */
 ticketRoutes.get(
   "/:id",
@@ -265,10 +317,35 @@ ticketRoutes.get(
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 400
+ *               message: Os dados enviados são inválidos.
+ *               errors:
+ *                 - field: titulo
+ *                   message: O título não pode ultrapassar 150 caracteres.
  *       '401':
  *         description: Usuário não autenticado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 401
+ *               message: Usuário não autenticado.
+ *               errors: []
  *       '404':
  *         description: Local ou equipamento não encontrado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 404
+ *               message: Local ou equipamento não encontrado.
+ *               errors: []
  */
 ticketRoutes.post(
   "/",
@@ -333,12 +410,46 @@ ticketRoutes.post(
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 400
+ *               message: Os dados enviados são inválidos.
+ *               errors:
+ *                 - field: prioridade
+ *                   message: Informe uma prioridade válida.
  *       '401':
  *         description: Usuário não autenticado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 401
+ *               message: Usuário não autenticado.
+ *               errors: []
  *       '403':
  *         description: Usuário não possui permissão para gerenciar este chamado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 403
+ *               message: Você não possui permissão para realizar esta operação.
+ *               errors: []
  *       '404':
  *         description: Chamado, local, equipamento ou técnico não encontrado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 404
+ *               message: Chamado não encontrado.
+ *               errors: []
  */
 ticketRoutes.put(
   "/:id",
@@ -400,12 +511,46 @@ ticketRoutes.put(
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 400
+ *               message: Os dados enviados são inválidos.
+ *               errors:
+ *                 - field: justificativa
+ *                   message: A justificativa não pode ficar vazia.
  *       '401':
  *         description: Usuário não autenticado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 401
+ *               message: Usuário não autenticado.
+ *               errors: []
  *       '403':
  *         description: Usuário não possui permissão para cancelar este chamado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 403
+ *               message: Você não possui permissão para realizar esta operação.
+ *               errors: []
  *       '404':
  *         description: Chamado não encontrado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 404
+ *               message: Chamado não encontrado.
+ *               errors: []
  */
 ticketRoutes.patch(
   "/:id/cancel",

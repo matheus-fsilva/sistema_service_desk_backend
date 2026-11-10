@@ -58,12 +58,44 @@ ticketCommentRoutes.use(authMiddleware);
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 400
+ *               message: ID inválido.
+ *               errors: []
  *       '401':
  *         description: Usuário não autenticado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 401
+ *               message: Usuário não autenticado.
+ *               errors: []
  *       '403':
  *         description: Usuário não possui permissão para visualizar este chamado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 403
+ *               message: Você não possui permissão para visualizar este chamado.
+ *               errors: []
  *       '404':
  *         description: Chamado não encontrado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 404
+ *               message: Chamado não encontrado.
+ *               errors: []
  */
 ticketCommentRoutes.get(
   "/:ticketId/comments",
@@ -127,12 +159,46 @@ ticketCommentRoutes.get(
  *           application/json:
  *             schema:
  *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 400
+ *               message: Os dados enviados são inválidos.
+ *               errors:
+ *                 - field: comentario
+ *                   message: O comentário não pode ficar vazio.
  *       '401':
  *         description: Usuário não autenticado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 401
+ *               message: Usuário não autenticado.
+ *               errors: []
  *       '403':
  *         description: Usuário não possui permissão para comentar neste chamado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 403
+ *               message: Você não possui permissão para comentar neste chamado.
+ *               errors: []
  *       '404':
  *         description: Chamado não encontrado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 404
+ *               message: Chamado não encontrado.
+ *               errors: []
  */
 ticketCommentRoutes.post(
   "/:ticketId/comments",

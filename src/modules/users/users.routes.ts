@@ -82,10 +82,39 @@ userRoutes.use(authMiddleware);
  *         description: Usuários listados com sucesso.
  *       '400':
  *         description: Parâmetros de consulta inválidos.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 400
+ *               message: Os dados enviados são inválidos.
+ *               errors:
+ *                 - field: page
+ *                   message: A página deve ser um número inteiro positivo.
  *       '401':
  *         description: Usuário não autenticado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 401
+ *               message: Usuário não autenticado.
+ *               errors: []
  *       '403':
  *         description: Usuário sem permissão.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 403
+ *               message: Você não possui permissão para realizar esta operação.
+ *               errors: []
  */
 userRoutes.get(
   "/",
@@ -110,8 +139,26 @@ userRoutes.get(
  *         description: Usuários comuns listados com sucesso.
  *       '401':
  *         description: Usuário não autenticado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 401
+ *               message: Usuário não autenticado.
+ *               errors: []
  *       '403':
  *         description: Usuário sem permissão.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 403
+ *               message: Você não possui permissão para realizar esta operação.
+ *               errors: []
  */
 userRoutes.get(
   "/type/usuario",
@@ -135,8 +182,26 @@ userRoutes.get(
  *         description: Usuários N1 listados com sucesso.
  *       '401':
  *         description: Usuário não autenticado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 401
+ *               message: Usuário não autenticado.
+ *               errors: []
  *       '403':
  *         description: Usuário sem permissão.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 403
+ *               message: Você não possui permissão para realizar esta operação.
+ *               errors: []
  */
 userRoutes.get(
   "/type/n1",
@@ -160,8 +225,26 @@ userRoutes.get(
  *         description: Usuários N2 listados com sucesso.
  *       '401':
  *         description: Usuário não autenticado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 401
+ *               message: Usuário não autenticado.
+ *               errors: []
  *       '403':
  *         description: Usuário sem permissão.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 403
+ *               message: Você não possui permissão para realizar esta operação.
+ *               errors: []
  */
 userRoutes.get(
   "/type/n2",
@@ -185,8 +268,26 @@ userRoutes.get(
  *         description: Administradores listados com sucesso.
  *       '401':
  *         description: Usuário não autenticado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 401
+ *               message: Usuário não autenticado.
+ *               errors: []
  *       '403':
  *         description: Usuário sem permissão.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 403
+ *               message: Você não possui permissão para realizar esta operação.
+ *               errors: []
  */
 userRoutes.get(
   "/type/admin",
@@ -219,12 +320,48 @@ userRoutes.get(
  *         description: Usuário encontrado.
  *       '400':
  *         description: Identificador inválido.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 400
+ *               message: ID inválido.
+ *               errors: []
  *       '401':
  *         description: Usuário não autenticado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 401
+ *               message: Usuário não autenticado.
+ *               errors: []
  *       '403':
  *         description: Usuário sem permissão.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 403
+ *               message: Você não possui permissão para realizar esta operação.
+ *               errors: []
  *       '404':
  *         description: Usuário não encontrado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 404
+ *               message: Usuário não encontrado.
+ *               errors: []
  */
 userRoutes.get(
   "/:id",
@@ -260,12 +397,50 @@ userRoutes.get(
  *         description: Usuário cadastrado com sucesso.
  *       '400':
  *         description: Dados da requisição inválidos.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 400
+ *               message: Os dados enviados são inválidos.
+ *               errors:
+ *                 - field: email
+ *                   message: Informe um endereço de e-mail válido.
  *       '401':
  *         description: Usuário não autenticado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 401
+ *               message: Usuário não autenticado.
+ *               errors: []
  *       '403':
  *         description: Somente administradores podem cadastrar usuários.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 403
+ *               message: Você não possui permissão para realizar esta operação.
+ *               errors: []
  *       '409':
  *         description: E-mail já cadastrado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 409
+ *               message: Este e-mail já está cadastrado.
+ *               errors: []
  */
 userRoutes.post(
   "/",
@@ -310,14 +485,61 @@ userRoutes.post(
  *         description: Usuário atualizado com sucesso.
  *       '400':
  *         description: Dados inválidos ou identificador inválido.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 400
+ *               message: Os dados enviados são inválidos.
+ *               errors:
+ *                 - field: email
+ *                   message: Informe um endereço de e-mail válido.
  *       '401':
  *         description: Usuário não autenticado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 401
+ *               message: Usuário não autenticado.
+ *               errors: []
  *       '403':
  *         description: Operação não permitida, incluindo tentativa de desativar a própria conta.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 403
+ *               message: Você não possui permissão para realizar esta operação.
+ *               errors: []
  *       '404':
  *         description: Usuário não encontrado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 404
+ *               message: Usuário não encontrado.
+ *               errors: []
  *       '409':
  *         description: E-mail já cadastrado ou tentativa de remover o último administrador ativo.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 409
+ *               message: Não é possível desativar o último administrador ativo.
+ *               errors: []
  */
 userRoutes.put(
   "/:id",
@@ -351,14 +573,59 @@ userRoutes.put(
  *         description: Usuário excluído logicamente com sucesso.
  *       '400':
  *         description: Identificador inválido.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 400
+ *               message: ID inválido.
+ *               errors: []
  *       '401':
  *         description: Usuário não autenticado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 401
+ *               message: Usuário não autenticado.
+ *               errors: []
  *       '403':
  *         description: Operação não permitida, incluindo tentativa de desativar a própria conta.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 403
+ *               message: Você não possui permissão para realizar esta operação.
+ *               errors: []
  *       '404':
  *         description: Usuário não encontrado.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 404
+ *               message: Usuário não encontrado.
+ *               errors: []
  *       '409':
  *         description: Não é possível desativar o último administrador ativo.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: '#/components/schemas/ErrorResponse'
+ *             example:
+ *               status: error
+ *               statusCode: 409
+ *               message: Não é possível desativar o último administrador ativo.
+ *               errors: []
  */
 userRoutes.delete(
   "/:id",
