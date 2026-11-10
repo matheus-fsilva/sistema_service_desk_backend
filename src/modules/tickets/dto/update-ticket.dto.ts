@@ -13,13 +13,29 @@ export const updateTicketSchema = z
       .min(1, "A descrição não pode ficar vazia.")
       .optional(),
 
-    tipo: z.enum(["Hardware", "Software"]).optional(),
+    tipo: z
+      .enum(["Hardware", "Software"], {
+        message: "O tipo deve ser Hardware ou Software.",
+      })
+      .optional(),
 
-    prioridade: z.enum(["Baixa", "Média", "Alta", "Crítica"]).optional(),
+    prioridade: z
+      .enum(["Baixa", "Média", "Alta", "Crítica"], {
+        message: "Informe uma prioridade válida.",
+      })
+      .optional(),
 
-    status: z.enum(["Aberto", "Em andamento", "Fechado"]).optional(),
+    status: z
+      .enum(["Aberto", "Em andamento", "Fechado"], {
+        message: "Informe um status válido.",
+      })
+      .optional(),
 
-    nivel_atendimento: z.enum(["N1", "N2"]).optional(),
+    nivel_atendimento: z
+      .enum(["N1", "N2"], {
+        message: "Informe um nível de atendimento válido.",
+      })
+      .optional(),
 
     id_local: z.number().int().positive().nullable().optional(),
 
