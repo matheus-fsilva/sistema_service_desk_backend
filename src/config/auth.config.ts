@@ -27,8 +27,7 @@ const authConfig = {
   jwt: {
     secret: validateSecret("JWT_SECRET"),
 
-    expiresIn: (process.env.JWT_EXPIRES_IN ||
-      "15m") as SignOptions["expiresIn"],
+    expiresIn: (process.env.JWT_EXPIRES_IN || "1d") as SignOptions["expiresIn"],
 
     algorithm: "HS256" as const,
   },
