@@ -1,6 +1,9 @@
 {
   "name": "projeto_service_desk_backend",
   "version": "1.0.0",
+  "engines": {
+    "node": ">=24.19.0 <25"
+  },
   "description": "",
   "main": "index.js",
   "scripts": {
