@@ -34,10 +34,6 @@ class TicketService {
     return database.getRepository(Equipment);
   }
 
-  private get commentRepository(): Repository<TicketComment> {
-    return database.getRepository(TicketComment);
-  }
-
   // Listar chamados com filtros, paginação e permissões
   async index(
     searchParams: SearchTicketDTO,

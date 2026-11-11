@@ -4,6 +4,7 @@ import authController from "./auth.controller";
 import { loginSchema } from "./dto/login.dto";
 
 import validateSchema from "../../middlewares/validateSchema";
+import { loginRateLimiter } from "../../middlewares/rateLimit";
 
 const authRoutes = Router();
 
@@ -53,7 +54,23 @@ const authRoutes = Router();
  *               statusCode: 401
  *               message: E-mail ou senha inválidos.
  *               errors: []
+ *       429:
+ *         description: Limite de tentativas de login excedido.
+ *         content:
+ *           application/json:
+ *             schema:
+ *               $ref: "#/components/schemas/ErrorResponse"
+ *             example:
+ *               status: error
+ *               statusCode: 429
+ *               message: Muitas tentativas de login. Tente novamente após 15 minutos.
+ *               errors: []
  */
-authRoutes.post("/login", validateSchema(loginSchema), authController.login);
+authRoutes.post(
+  "/login",
+  loginRateLimiter,
+  validateSchema(loginSchema),
+  authController.login,
+);
 
 export default authRoutes;

@@ -4,9 +4,15 @@ import swaggerUi from "swagger-ui-express";
 import { swaggerDefinition } from "./swagger.definition";
 
 export function setupSwagger(app: Express): void {
+  const isProduction = process.env.NODE_ENV === "production";
+
   const swaggerSpec = swaggerJsdoc({
     definition: swaggerDefinition,
-    apis: ["./src/modules/**/*.routes.ts"],
+    apis: [
+      isProduction
+        ? "./dist/modules/**/*.routes.js"
+        : "./src/modules/**/*.routes.ts",
+    ],
   });
 
   // Redireciona a raiz para a documentação interativa

@@ -335,6 +335,53 @@ export const swaggerDefinition = {
         },
       },
 
+      LocalPagination: {
+        type: "object",
+        required: ["page", "limit", "total", "totalPages"],
+        properties: {
+          page: {
+            type: "integer",
+            example: 1,
+          },
+          limit: {
+            type: "integer",
+            example: 10,
+          },
+          total: {
+            type: "integer",
+            example: 25,
+          },
+          totalPages: {
+            type: "integer",
+            example: 3,
+          },
+        },
+      },
+
+      LocalListResponse: {
+        type: "object",
+        required: ["status", "message", "data", "pagination"],
+        properties: {
+          status: {
+            type: "string",
+            example: "success",
+          },
+          message: {
+            type: "string",
+            example: "Locais listados com sucesso.",
+          },
+          data: {
+            type: "array",
+            items: {
+              $ref: "#/components/schemas/LocalResponse",
+            },
+          },
+          pagination: {
+            $ref: "#/components/schemas/LocalPagination",
+          },
+        },
+      },
+
       // TICKETS
 
       TicketResponse: {
