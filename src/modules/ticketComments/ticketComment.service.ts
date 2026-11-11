@@ -32,6 +32,7 @@ class TicketCommentService {
         },
       },
       relations: {
+        chamado: true,
         usuario: true,
       },
       order: {
