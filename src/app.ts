@@ -23,6 +23,10 @@ app.use(express.json());
 setupSwagger(app);
 
 // Rotas da aplicação
+app.get("/api", (_req, res) => {
+  return res.redirect("/api/docs/");
+});
+
 app.use("/api", routes);
 
 // Tratamento de erros
